@@ -1,14 +1,14 @@
 import Foundation
 
-public struct Catalog: Decodable {
-    var sourceLanguage: String
-    var strings: [String: CatalogString]
-    var version: String
+public struct StringCatalog: Decodable {
+    public var sourceLanguage: String
+    public var strings: [String: Entry]
+    public var version: String
 
-    public struct CatalogString: Decodable {
-        var localizations: [String: Localization]?
-        var comment: String?
-        var extractionState: String?
+    public struct Entry: Decodable {
+        public var localizations: [String: Localization]?
+        public var comment: String?
+        public var extractionState: String?
 
         public enum ExtractionState: String, Decodable {
             case manual
@@ -23,11 +23,11 @@ public struct Catalog: Decodable {
         }
 
         public struct Localization: Decodable {
-            var stringUnit: StringUnit?
+            public var stringUnit: StringUnit?
 
             public struct StringUnit: Decodable {
-                var state: State
-                var value: String
+                public var state: State
+                public var value: String
 
                 public enum State: String, Decodable {
                     case translated

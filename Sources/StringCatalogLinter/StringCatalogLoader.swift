@@ -1,9 +1,10 @@
 import Foundation
 import Validator
+import StringCatalogDecodable
 import ArgumentParser
 
-struct CatalogLoader {
-    func loadCatalog(from path: String) throws -> Catalog {
+struct StringCatalogLoader {
+    func loadCatalog(from path: String) throws -> StringCatalog {
         let fileManager = FileManager.default
 
         guard fileManager.fileExists(atPath: path) else {
@@ -15,9 +16,9 @@ struct CatalogLoader {
         return try loadCatalog(from: data)
     }
 
-    func loadCatalog(from data: Data) throws -> Catalog {
+    func loadCatalog(from data: Data) throws -> StringCatalog {
         let decoder = JSONDecoder()
 
-        return try decoder.decode(Catalog.self, from: data)
+        return try decoder.decode(StringCatalog.self, from: data)
     }
 }

@@ -1,8 +1,36 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "is not marked as manual" : {
+    "is missing translations for languages keys: %@" : {
 
+    },
+    "is not marked as manual" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "is not marked as manual"
+          }
+        }
+      }
+    },
+    "manual string" : {
+      "comment" : "[no lint]",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "manual string"
+          }
+        }
+      }
+    },
+    "was added manually" : {
+
+    },
+    "zz" : {
+      "extractionState" : "manual"
     }
   },
   "version" : "1.0"

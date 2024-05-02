@@ -4,31 +4,43 @@
 import PackageDescription
 
 let package = Package(
-    name: "XCStringsLint",
+    name: "StringCatalogLinter",
     defaultLocalization: "en",
     platforms: [
         .macOS(.v12)
     ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .executable(name: "XCStringsLint", targets: ["XCStringsLint"])
+        .executable(name: "StringCatalogLinter", targets: ["StringCatalogLinter"]),
+        .plugin(
+            name: "StringCatalogLinterPlugin",
+            targets: ["StringCatalogLinterPlugin"]
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0"),
     ],
     targets: [
-        .target(name: "Validator"),
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .executableTarget(
-            name: "XCStringsLint",
-            dependencies: [
-                .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                "Validator"
+        .target(
+            name: "Validator",
+            dependencies: ["StringCatalogDecodable"],
+            plugins: [
+                // Unfortunately we cannot use this library to meta-lint this library directly
+                // However, once we compile the library to an executable we might be able to
+                //.plugin(name: "StringCatalogLinterPlugin")
             ]
         ),
-        .testTarget(
-            name: "XCStringsLintTests",
-            dependencies: ["XCStringsLint"]),
+        .target(name: "StringCatalogDecodable"),
+        .executableTarget(
+            name: "StringCatalogLinter",
+            dependencies: [
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                "Validator",
+            ]
+        ),
+        .plugin(
+            name: "StringCatalogLinterPlugin",
+            capability: .buildTool(),
+            dependencies: ["StringCatalogLinter"]
+        )
     ]
 )

@@ -2,17 +2,8 @@ import Foundation
 import Validator
 import ArgumentParser
 
-/*
- Purpose: To warn, or fail, when a xcstrings key is not translated for the specified languages
-
- Feature: Allow a comment tag to ignore
- Feature: Allow or dissallow automatic translations
- Feature: Allow or dissallow manual translations
-
- */
-
 @main
-struct XCStringsLint: ParsableCommand {
+struct StringCatalogLinter: ParsableCommand {
 
     @Argument(help: "Path to the xcstrings catalog")
     private var path: String
@@ -21,13 +12,14 @@ struct XCStringsLint: ParsableCommand {
     private var manualOnly: Bool = false
 
     mutating func run() throws {
-        let catalog = try CatalogLoader().loadCatalog(from: path)
+        let catalog = try StringCatalogLoader().loadCatalog(from: path)
 
         var rules: [Rule] = []
 
+        // TODO: Make the rules come from arguments or config file
         if (true) {
-//            rules.append(Rules.requireManual)
-//            rules.append(Rules.disallowManual)
+            rules.append(Rules.requireManual)
+            rules.append(Rules.disallowManual)
             rules.append(Rules.requireTranslation(languages: "en", "fr"))
         }
 

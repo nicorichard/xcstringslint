@@ -1,3 +1,5 @@
+import StringCatalogDecodable
+
 public struct ValidationResult {
     public let key: String
     public let validation: RuleValidation
@@ -18,7 +20,7 @@ public struct Validator {
         self.ignores = ignores
     }
 
-    public func validate(catalog: Catalog) -> [ValidationResult] {
+    public func validate(catalog: StringCatalog) -> [ValidationResult] {
         rules.flatMap { rule in
             catalog.strings.reduce([ValidationResult]()) { acc, current in
                 let (key, value) = current
