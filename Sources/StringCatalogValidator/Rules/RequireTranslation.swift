@@ -1,6 +1,7 @@
+// TODO: include or disclude "needs_review"
+
 extension Rules {
-    // TODO: include or disclude "needs_review"
-    public static func requireTranslation(languages: String...) -> Rule {
+    public static func requireTranslation(languages: [String]) -> Rule {
         Rule { key, value in
             let missingLanguages = languages.filter { language in
                 value.localizations?[language] == nil
@@ -14,5 +15,8 @@ extension Rules {
                 )
             ]
         }
+    }
+    public static func requireTranslation(languages: String...) -> Rule {
+        requireTranslation(languages: languages)
     }
 }

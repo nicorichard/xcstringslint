@@ -5,23 +5,44 @@ import ArgumentParser
 @main
 struct StringCatalogLinter: ParsableCommand {
 
-    @Argument(help: "Path to the xcstrings catalog")
-    private var path: String
+    @Argument(help: "Path(s) to .xcstrings String Catalogs")
+    private var paths: [String]
 
     @Flag
-    private var manualOnly: Bool = false
+    private var requireManual: Bool = false
+
+    @Flag
+    private var requireAutomatic: Bool = false
+
+    @Option(name: .customLong("requireLocale"))
+    private var requireLocales: [String] = []
 
     mutating func run() throws {
+        for path in paths {
+            try run(path: path)
+        }
+    }
+
+    func run(path: String) throws {
         let catalog = try StringCatalogLoader().loadCatalog(from: path)
 
         var rules: [Rule] = []
 
-        // TODO: Make the rules come from arguments or config file
-        if (true) {
-            rules.append(Rules.requireManual)
-            rules.append(Rules.disallowManual)
-            rules.append(Rules.requireTranslation(languages: "en", "fr"))
+        if requireManual {
+            rules.append(
+                Rules.requireManual
+            )
         }
+
+        if requireAutomatic {
+            rules.append(
+                Rules.requireAutomatic
+            )
+        }
+
+        rules.append(
+            Rules.requireTranslation(languages: requireLocales)
+        )
 
         let results = Validator(rules: rules, ignores: Ignore.default)
             .validate(catalog: catalog)

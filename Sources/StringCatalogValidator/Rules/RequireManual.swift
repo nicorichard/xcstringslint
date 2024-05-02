@@ -11,7 +11,7 @@ extension Rules {
         ]
     }
 
-    public static let disallowManual = Rule { key, value in
+    public static let requireAutomatic = Rule { key, value in
         guard (value.extractionState == "manual") else { return [] }
 
         return [
