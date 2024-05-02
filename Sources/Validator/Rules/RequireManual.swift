@@ -1,15 +1,22 @@
 import Foundation
 
-public struct RequireManual: Rule {
-    public init() {}
-    
-    public func validate(key: String, value: Catalog.CatalogString) -> [RuleValidation] {
-
+extension Rules {
+    public static let requireManual = Rule { key, value in
         guard (value.extractionState != "manual") else { return [] }
 
         return [
             RuleValidation(
                 message: String(localized: "is not marked as manual", bundle: .module)
+            )
+        ]
+    }
+
+    public static let disallowManual = Rule { key, value in
+        guard (value.extractionState == "manual") else { return [] }
+
+        return [
+            RuleValidation(
+                message: String(localized: "was added manually", bundle: .module)
             )
         ]
     }

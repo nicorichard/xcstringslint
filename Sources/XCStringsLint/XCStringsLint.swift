@@ -26,10 +26,13 @@ struct XCStringsLint: ParsableCommand {
         var rules: [Rule] = []
 
         if (true) {
-            rules.append(RequireManual())
+//            rules.append(Rules.requireManual)
+//            rules.append(Rules.disallowManual)
+            rules.append(Rules.requireTranslation(languages: "en", "fr"))
         }
 
-        let results = Validator().validate(catalog: catalog, with: rules)
+        let results = Validator(rules: rules, ignores: Ignore.default)
+            .validate(catalog: catalog)
 
         for result in results {
             print("`\(result.key)` \(result.validation.message)")
