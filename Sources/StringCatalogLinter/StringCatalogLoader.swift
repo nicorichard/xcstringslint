@@ -1,5 +1,5 @@
 import Foundation
-import Validator
+import StringCatalogValidator
 import StringCatalogDecodable
 import ArgumentParser
 

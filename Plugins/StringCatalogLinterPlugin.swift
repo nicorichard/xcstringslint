@@ -1,33 +1,38 @@
 import Foundation
 import PackagePlugin
 
+let toolName = "StringCatalogLinter"
+
 @main
 struct SwiftLintPlugin: BuildToolPlugin {
     func createBuildCommands(context: PluginContext, target: Target) async throws -> [Command] {
         let targets = context.package.targets.filter { $0 is SourceModuleTarget }
-        return try targets.map { try makeBuildCommand(context: context, target: $0) }
+        return try targets.flatMap { try commandsForTarget(context: context, target: $0) }
     }
 
-    private func makeBuildCommand(context: PluginContext, target: Target) throws -> Command {
-        let toolPath = try context.tool(named: "XCStringsLint").path
-
+    private func commandsForTarget(context: PluginContext, target: Target) throws -> [Command] {
+        let toolPath = try context.tool(named: toolName).path
         let displayName = "Running String Catalog linter for \(target.name)"
-        let packageDirectoryPath = context.package.directory.string
-        let targetDirectoryPath = target.directory.string
 
-        target.sourceModule?.sourceFiles.forEach {
-            print("!@# \($0.path)")
+        let catalogs = target.sourceModule?.sourceFiles.filter {
+            $0.path.lastComponent.hasSuffix(".xcstrings")
+        } ?? []
+
+        if catalogs.isEmpty {
+            Diagnostics.warning("No xcstrings files found in \(target.name)")
         }
 
-        let arguments: [CustomStringConvertible] = [
-            // TODO: The tool might need to find the resources itself
-        ]
+        return catalogs.map { catalog in
+            let arguments: [CustomStringConvertible] = [
+                catalogs.first!.path
+            ]
 
-        return .buildCommand(
-            displayName: displayName,
-            executable: toolPath,
-            arguments: arguments
-        )
+            return .buildCommand(
+                displayName: displayName,
+                executable: toolPath,
+                arguments: arguments
+            )
+        }
     }
 }
 
@@ -36,26 +41,29 @@ import XcodeProjectPlugin
 
 extension SwiftLintPlugin: XcodeBuildToolPlugin {
     func createBuildCommands(context: XcodePluginContext, target: XcodeTarget) throws -> [Command] {
-        let toolPath = try context.tool(named: "XCStringsLint").path
+        let toolPath = try context.tool(named: toolName).path
 
         let displayName = "Running String Catalog linter for \(target.displayName)"
-        let projectDirectoryPath = context.xcodeProject.directory.string
 
-        // TODO: Find the .xcstrings files and validate them
-
-        target.inputFiles.forEach {
-            print("!@# \($0.path)")
+        let catalogs = target.inputFiles.filter {
+            $0.path.lastComponent.hasSuffix(".xcstrings")
         }
 
-        let arguments: [CustomStringConvertible] = []
+        if catalogs.isEmpty {
+            Diagnostics.warning("No xcstrings files found in \(target.displayName)")
+        }
 
-        return [
-            .buildCommand(
+        return catalogs.map { catalog in
+            let arguments: [CustomStringConvertible] = [
+                catalog.path
+            ]
+
+            return .buildCommand(
                 displayName: displayName,
                 executable: toolPath,
                 arguments: arguments
             )
-        ]
+        }
     }
 }
 

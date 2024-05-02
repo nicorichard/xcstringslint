@@ -21,7 +21,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Validator",
+            name: "StringCatalogValidator",
             dependencies: ["StringCatalogDecodable"],
             plugins: [
                 // Unfortunately we cannot use this library to meta-lint this library directly
@@ -34,7 +34,7 @@ let package = Package(
             name: "StringCatalogLinter",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
-                "Validator",
+                "StringCatalogValidator",
             ]
         ),
         .plugin(
