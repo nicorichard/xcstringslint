@@ -1,4 +1,5 @@
 import Foundation
+import Validator
 import ArgumentParser
 
 struct CatalogLoader {

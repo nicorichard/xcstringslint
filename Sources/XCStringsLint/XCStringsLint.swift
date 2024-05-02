@@ -1,12 +1,13 @@
 import Foundation
+import Validator
 import ArgumentParser
 
 /*
  Purpose: To warn, or fail, when a xcstrings key is not translated for the specified languages
 
  Feature: Allow a comment tag to ignore
- Feature: Allow or dissalow automatic translations
- Feature: Allow or dissalow manual translations
+ Feature: Allow or dissallow automatic translations
+ Feature: Allow or dissallow manual translations
 
  */
 
@@ -25,19 +26,19 @@ struct XCStringsLint: ParsableCommand {
         var rules: [Rule] = []
 
         if (true) {
-            rules.append(ManualOnlyRule())
+            rules.append(RequireManual())
         }
 
-        let validations = rules.flatMap { $0.run(catalog: catalog) }
+        let results = Validator().validate(catalog: catalog, with: rules)
 
-        for validation in validations {
-            print("`\(validation.key)` \(validation.message)")
+        for result in results {
+            print("`\(result.key)` \(result.validation.message)")
         }
 
-        if !validations.isEmpty {
+        if !results.isEmpty {
             print("""
 
-            Error: Found \(validations.count) validation issues in catalog: \(path)
+            [Error]: Found \(results.count) validation issues in catalog: \(path)
 
             """)
             throw ExitCode.failure
