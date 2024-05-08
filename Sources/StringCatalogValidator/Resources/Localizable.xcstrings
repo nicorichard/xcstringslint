@@ -2,13 +2,32 @@
   "sourceLanguage" : "en",
   "strings" : {
     "is missing translations for languages keys: %@" : {
-
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "device" : {
+              "ipod" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "is missing translations for languages keys on an ipod: %@"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "new",
+                  "value" : "is missing translations for languages keys: %@"
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "is not marked as manual" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "is not marked as manual"
           }
         }
@@ -22,6 +41,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "manual string"
+          }
+        }
+      }
+    },
+    "Validating catalog with %lld rules" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "device" : {
+              "iphone" : {
+                "variations" : {
+                  "plural" : {
+                    "one" : {
+                      "stringUnit" : {
+                        "state" : "needs_review",
+                        "value" : "Validating many catalogs with %lld rules"
+                      }
+                    },
+                    "other" : {
+                      "stringUnit" : {
+                        "state" : "needs_review",
+                        "value" : "Validating many catalogs with %lld rules"
+                      }
+                    }
+                  }
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "needs_review",
+                  "value" : "Validating many catalogs with %lld rules"
+                }
+              }
+            }
+          }
+        },
+        "pl" : {
+          "variations" : {
+            "device" : {
+              "iphone" : {
+                "variations" : {
+                  "plural" : {
+                    "one" : {
+                      "stringUnit" : {
+                        "state" : "needs_review",
+                        "value" : "Validating many catalogs with %lld rules"
+                      }
+                    },
+                    "other" : {
+                      "stringUnit" : {
+                        "state" : "needs_review",
+                        "value" : "Validating many catalogs with %lld rules"
+                      }
+                    }
+                  }
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "needs_review",
+                  "value" : "Validating many catalogs with %lld rules"
+                }
+              }
+            }
           }
         }
       }
