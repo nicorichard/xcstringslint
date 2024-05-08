@@ -2,7 +2,7 @@ import StringCatalogDecodable
 
 public struct ValidationResult {
     public let key: String
-    public let validation: RuleValidation
+    public let validations: [RuleValidation]
 }
 
 public struct Validator {
@@ -21,24 +21,27 @@ public struct Validator {
     }
 
     public func validate(catalog: StringCatalog) -> [ValidationResult] {
-        rules.flatMap { rule in
-            catalog.strings.reduce([ValidationResult]()) { acc, current in
-                let (key, value) = current
+        catalog.strings.reduce([ValidationResult]()) { acc, current in
+            let (key, value) = current
 
+            let results: [RuleValidation] = rules.flatMap { rule in
                 let ignore = ignores
                     .reduce(false, { acc, ignore in
                         acc || ignore.ignore(key: key, rule: rule.name, value: value)
                     })
 
                 if ignore {
-                    return acc
+                    return [RuleValidation]()
                 }
 
-                let results = rule.validate(key: key, value: value)
-                    .map { validation in ValidationResult(key: key, validation: validation) }
-
-                return acc + results
+                return rule.validate(key: key, value: value)
             }
+
+            if results.isEmpty {
+                return acc
+            }
+
+            return acc + [ValidationResult(key: key, validations: results)]
         }
     }
 }

@@ -57,7 +57,10 @@ struct StringCatalogLinter: ParsableCommand {
             .validate(catalog: catalog)
 
         for result in results {
-            print("`\(result.key)` \(result.validation.message)")
+            print("`\(result.key)` has validation issues")
+            for validation in result.validations {
+                print("  - \(validation.message)")
+            }
         }
 
         if !results.isEmpty {
