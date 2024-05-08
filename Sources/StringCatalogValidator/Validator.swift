@@ -21,27 +21,30 @@ public struct Validator {
     }
 
     public func validate(catalog: StringCatalog) -> [ValidationResult] {
-        catalog.strings.reduce([ValidationResult]()) { acc, current in
-            let (key, value) = current
+        catalog
+            .strings
+            .sorted { $0.key < $1.key }
+            .reduce([ValidationResult]()) { acc, current in
+                let (key, value) = current
 
-            let results: [RuleValidation] = rules.flatMap { rule in
-                let ignore = ignores
-                    .reduce(false, { acc, ignore in
-                        acc || ignore.ignore(key: key, rule: rule.name, value: value)
-                    })
+                let results: [RuleValidation] = rules.flatMap { rule in
+                    let ignore = ignores
+                        .reduce(false, { acc, ignore in
+                            acc || ignore.ignore(key: key, rule: rule.name, value: value)
+                        })
 
-                if ignore {
-                    return [RuleValidation]()
+                    if ignore {
+                        return [RuleValidation]()
+                    }
+
+                    return rule.validate(key: key, value: value)
                 }
 
-                return rule.validate(key: key, value: value)
-            }
+                if results.isEmpty {
+                    return acc
+                }
 
-            if results.isEmpty {
-                return acc
+                return acc + [ValidationResult(key: key, validations: results)]
             }
-
-            return acc + [ValidationResult(key: key, validations: results)]
-        }
     }
 }
