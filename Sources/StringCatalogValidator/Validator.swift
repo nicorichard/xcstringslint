@@ -26,7 +26,9 @@ public struct Validator {
                 let (key, value) = current
 
                 let ignore = ignores
-                    .reduce(false, { acc, ignore in acc || ignore.ignore(key: key, value: value) })
+                    .reduce(false, { acc, ignore in
+                        acc || ignore.ignore(key: key, rule: rule.name, value: value)
+                    })
 
                 if ignore {
                     return acc

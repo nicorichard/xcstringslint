@@ -55,7 +55,7 @@
       }
     },
     "manual string" : {
-      "comment" : "[no lint]",
+      "comment" : "[no-lint]",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
