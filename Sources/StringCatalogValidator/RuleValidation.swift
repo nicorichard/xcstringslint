@@ -2,13 +2,16 @@ import Foundation
 import StringCatalogDecodable
 
 public protocol RuleProtocol {
+    var name: String { get }
     func validate(key: String, value: StringCatalog.Entry) -> [RuleValidation]
 }
 
 public struct Rule: RuleProtocol {
+    public let name: String
     let validateFn: (_ key: String, _ value: StringCatalog.Entry) -> [RuleValidation]
 
-    public init(validate: @escaping (_: String, _: StringCatalog.Entry) -> [RuleValidation]) {
+    public init(_ name: String, validate: @escaping (_: String, _: StringCatalog.Entry) -> [RuleValidation]) {
+        self.name = name
         self.validateFn = validate
     }
 
@@ -18,13 +21,18 @@ public struct Rule: RuleProtocol {
 }
 
 extension Rule {
-    public init(validate: @escaping (_: String, _: StringCatalog.Entry) -> String) {
+    public init(_ name: String, validate: @escaping (_: String, _: StringCatalog.Entry) -> String?) {
+        self.name = name
         self.validateFn = { key, value in
-            [RuleValidation(message: validate(key, value))]
+            guard let message = validate(key, value) else { return [] }
+            return [
+                RuleValidation(rule: name, message: message)
+            ]
         }
     }
 }
 
 public struct RuleValidation {
+    public let rule: String
     public let message: String
 }

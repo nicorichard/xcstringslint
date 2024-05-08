@@ -7,8 +7,8 @@ extension Rules {
     }
 
     public static func requireLocalizationState(state: Localization.StringUnit.State) -> Rule {
-        Rule { key, value in
-            guard let localizations = value.localizations else { return [] }
+        Rule("require-localization-state") { key, value in
+            guard let localizations = value.localizations else { return nil }
 
             let success = localizations.allSatisfy { key, value in
                 value.allUnits.allSatisfy {
@@ -17,12 +17,10 @@ extension Rules {
             }
 
             if success {
-                return []
+                return nil
             }
 
-            return [
-                RuleValidation(message: String(localized: "is not marked `\(state.description)`", bundle: .module))
-            ]
+            return String(localized: "is not marked `\(state.description)`", bundle: .module)
         }
     }
 

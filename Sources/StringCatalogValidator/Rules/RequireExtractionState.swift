@@ -2,17 +2,13 @@ import Foundation
 
 extension Rules {
     public static func requireExtractionState(state: String?) -> Rule {
-        Rule { key, value in
-            guard (value.extractionState == state) else { return [] }
+        Rule("require-extraction-state") { key, value in
+            guard (value.extractionState == state) else { return nil }
 
-            let message = switch state {
+            return switch state {
                 case .none: String(localized: "is not marked as empty", bundle: .module)
                 case .some(let state): String(localized: "is not marked as \(state)", bundle: .module)
             }
-
-            return [
-                RuleValidation(message: message)
-            ]
         }
     }
 

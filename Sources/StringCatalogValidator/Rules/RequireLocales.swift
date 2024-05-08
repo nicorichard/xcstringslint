@@ -1,17 +1,14 @@
 extension Rules {
     public static func requireLocale(locales: [String]) -> Rule {
-        Rule { key, value in
+        Rule("require-locale") { key, value in
             let missinglocales = locales.filter { language in
                 value.localizations?[language] == nil
             }
 
-            let missingLocaleList = missinglocales.joined(separator: ", ")
-
-            return [
-                RuleValidation(
-                    message: String(localized: "is missing translations for locales: \(missingLocaleList)", bundle: .module)
-                )
-            ]
+            return String(
+                localized: "is missing translations for locales: \(missinglocales.joined(separator: ", "))",
+                bundle: .module
+            )
         }
     }
     public static func requireLocale(locales: String...) -> Rule {

@@ -33,7 +33,7 @@ public struct Validator {
                 }
 
                 let results = rule.validate(key: key, value: value)
-                    .map { ValidationResult(key: key, validation: $0) }
+                    .map { validation in ValidationResult(key: key, validation: validation) }
 
                 return acc + results
             }
