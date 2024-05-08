@@ -3,7 +3,7 @@ import Foundation
 extension Rules {
     public static func requireExtractionState(state: String?) -> Rule {
         Rule("require-extraction-state") { key, value in
-            guard (value.extractionState == state) else { return nil }
+            if (value.extractionState == state) { return nil }
 
             return switch state {
                 case .none: String(localized: "is not marked as empty", bundle: .module)
@@ -12,6 +12,11 @@ extension Rules {
         }
     }
 
-    public static let requireManual: Rule = requireExtractionState(state: "manual")
-    public static let requireAutomatic = requireExtractionState(state: nil)
+    public static func rejectExtractionState(state: String) -> Rule {
+        Rule("reject-extraction-state") { key, value in
+            if (value.extractionState != state) { return nil }
+
+            return String(localized: "should not have state \(state)", bundle: .module)
+        }
+    }
 }

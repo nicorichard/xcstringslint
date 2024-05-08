@@ -15,6 +15,11 @@ public struct Rule: RuleProtocol {
         self.validateFn = validate
     }
 
+    public init(_ name: String, renaming rule: RuleProtocol) {
+        self.name = name
+        self.validateFn = rule.validate
+    }
+
     public func validate(key: String, value: StringCatalog.Entry) -> [RuleValidation] {
         validateFn(key, value)
     }

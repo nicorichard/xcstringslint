@@ -9,10 +9,10 @@ struct StringCatalogLinter: ParsableCommand {
     @Argument(help: "Path(s) to .xcstrings String Catalogs")
     private var paths: [String]
 
-    @Flag
+    @Flag(name: .customLong("requireManual"))
     private var requireManual: Bool = false
 
-    @Flag
+    @Flag(name: .customLong("requireAutomatic"))
     private var requireAutomatic: Bool = false
 
     @Option(name: .customLong("requireLocale"))
@@ -34,19 +34,19 @@ struct StringCatalogLinter: ParsableCommand {
 
         if requireManual {
             rules.append(
-                Rules.requireManual
+                Rules.requireExtractionState(state: "manual")
             )
         }
 
         if requireAutomatic {
             rules.append(
-                Rules.requireAutomatic
+                Rules.rejectExtractionState(state: "manual")
             )
         }
 
         if let requireState {
             rules.append(
-                Rules.requireLocalizationState(state: requireState)
+                Rules.requireLocalizationState(requireState)
             )
         }
 
