@@ -17,6 +17,9 @@ struct StringCatalogLinter: ParsableCommand {
     @Option(name: .customLong("requireLocale"))
     private var requireLocales: [String] = []
 
+    @Option(name: .customLong("requireState"))
+    private var requireState: String?
+
     mutating func run() throws {
         for path in paths {
             try run(path: path)
@@ -40,8 +43,14 @@ struct StringCatalogLinter: ParsableCommand {
             )
         }
 
+        if let requireState {
+            rules.append(
+                Rules.requireLocalizationState(state: requireState)
+            )
+        }
+
         rules.append(
-            Rules.requireTranslation(languages: requireLocales)
+            Rules.requireLocale(locales: requireLocales)
         )
 
         let results = Validator(rules: rules, ignores: Ignore.default)

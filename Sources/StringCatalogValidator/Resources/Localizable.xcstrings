@@ -2,6 +2,7 @@
   "sourceLanguage" : "en",
   "strings" : {
     "is missing translations for languages keys: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -23,7 +24,27 @@
         }
       }
     },
+    "is missing translations for locales: %@" : {
+      "localizations" : {
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        }
+      }
+    },
+    "is not marked `%@`" : {
+
+    },
+    "is not marked as %@" : {
+
+    },
+    "is not marked as empty" : {
+
+    },
     "is not marked as manual" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -46,6 +67,7 @@
       }
     },
     "Validating catalog with %lld rules" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "variations" : {
@@ -109,8 +131,8 @@
         }
       }
     },
-    "was added manually" : {
-
+    "wow" : {
+      "extractionState" : "manual"
     },
     "zz" : {
       "extractionState" : "manual"
