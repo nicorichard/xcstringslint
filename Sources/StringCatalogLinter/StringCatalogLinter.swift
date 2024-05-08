@@ -1,5 +1,6 @@
 import Foundation
 import StringCatalogValidator
+import StringCatalogDecodable
 import ArgumentParser
 
 @main
@@ -27,7 +28,7 @@ struct StringCatalogLinter: ParsableCommand {
     }
 
     func run(path: String) throws {
-        let catalog = try StringCatalogLoader().loadCatalog(from: path)
+        let catalog = try StringCatalog.load(from: path)
 
         var rules: [Rule] = []
 

@@ -3,8 +3,8 @@ import StringCatalogValidator
 import StringCatalogDecodable
 import ArgumentParser
 
-struct StringCatalogLoader {
-    func loadCatalog(from path: String) throws -> StringCatalog {
+extension StringCatalog {
+    static func load(from path: String) throws -> StringCatalog {
         let fileManager = FileManager.default
 
         guard fileManager.fileExists(atPath: path) else {
@@ -13,10 +13,10 @@ struct StringCatalogLoader {
 
         let data = try Data(contentsOf: URL(fileURLWithPath: path))
 
-        return try loadCatalog(from: data)
+        return try load(from: data)
     }
 
-    func loadCatalog(from data: Data) throws -> StringCatalog {
+    static func load(from data: Data) throws -> StringCatalog {
         let decoder = JSONDecoder()
 
         return try decoder.decode(StringCatalog.self, from: data)
