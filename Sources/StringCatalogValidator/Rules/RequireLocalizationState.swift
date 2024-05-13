@@ -3,19 +3,15 @@ import StringCatalogDecodable
 
 extension Rules {
     public static func requireLocalizationState(_ states: String...) -> Rule {
-        requireLocalizationState(states.map { Localization.StringUnit.State(from: $0) })
-    }
-
-    public static func requireLocalizationState(_ states: Localization.StringUnit.State...) -> Rule {
         requireLocalizationState(states)
     }
 
-    public static func requireLocalizationState(_ states: [Localization.StringUnit.State]) -> Rule {
+    public static func requireLocalizationState(_ states: [String]) -> Rule {
         Rule("require-localization-state") { key, value in
             guard let localizations = value.localizations else { return nil }
 
             let success = localizations.allSatisfy { key, value in
-                value.allUnits.allSatisfy {
+                value.stringUnits.allSatisfy {
                     states.contains($0.state)
                 }
             }
@@ -25,30 +21,30 @@ extension Rules {
             }
 
             if states.count == 1 {
-                return String(localized: "is not marked `\(states[0].description)`", bundle: .module)
+                return String(localized: "is not marked `\(states[0])`", bundle: .module)
             } else {
-                return String(localized: "is not marked one of \(states.map { "`\($0.description)`" }.joined(separator: ", "))", bundle: .module)
+                return String(localized: "is not marked one of \(states.map { "`\($0)`" }.joined(separator: ", "))", bundle: .module)
             }
         }
     }
 
-    public static func rejectLocalizationState(_ state: Localization.StringUnit.State) -> Rule {
+    public static func rejectLocalizationState(_ state: String) -> Rule {
         Rule("reject-localization-state") { key, value in
             guard let localizations = value.localizations else { return nil }
 
             let success = localizations.allSatisfy { key, value in
-                value.allUnits.allSatisfy {
+                value.stringUnits.allSatisfy {
                     $0.state == state
                 }
             }
 
             if success {
-                return String(localized: "should not have state `\(state.description)`", bundle: .module)
+                return String(localized: "should not have state `\(state)`", bundle: .module)
             }
 
             return nil
         }
     }
 
-    public static let requireTranslated: Rule = requireLocalizationState(.translated)
+    public static let requireTranslated: Rule = requireLocalizationState("translated")
 }
