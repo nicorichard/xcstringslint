@@ -1,6 +1,26 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "has state `%@`, expected %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "has state `%1$@`, expected %2$@"
+          }
+        }
+      }
+    },
+    "has state `%@`, expected one of %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "has state `%1$@`, expected one of %2$@"
+          }
+        }
+      }
+    },
     "is missing translations for languages keys: %@" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -34,9 +54,6 @@
         }
       }
     },
-    "is not marked `%@`" : {
-
-    },
     "is not marked as %@" : {
 
     },
@@ -53,9 +70,6 @@
           }
         }
       }
-    },
-    "is not marked one of %@" : {
-
     },
     "manual string" : {
       "comment" : "[no-lint]",

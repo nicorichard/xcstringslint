@@ -27,7 +27,7 @@ struct StringCatalogLinter: ParsableCommand {
     func run(path: String) throws {
         let catalog = try StringCatalog.load(from: path)
 
-        var rules: [RuleProtocol] = []
+        var rules: [Rule] = []
 
         if requireAutomatic {
             rules.append(

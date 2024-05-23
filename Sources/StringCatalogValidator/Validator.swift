@@ -7,15 +7,15 @@ public struct ValidationResult {
 
 public struct Validator {
 
-    let rules: [RuleProtocol]
+    let rules: [Rule]
     let ignores: [Ignore]
 
-    public init(rules: [RuleProtocol]) {
+    public init(rules: [Rule]) {
         self.rules = rules
         self.ignores = []
     }
 
-    public init(rules: [RuleProtocol], ignores: Ignore...) {
+    public init(rules: [Rule], ignores: Ignore...) {
         self.rules = rules
         self.ignores = ignores
     }
