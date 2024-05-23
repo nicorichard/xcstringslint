@@ -2,49 +2,81 @@ import Foundation
 import StringCatalogDecodable
 
 extension Rules {
-    public static func requireLocalizationState(_ states: String...) -> Rule {
-        requireLocalizationState(states)
-    }
+    public struct RequireLocalizationState: RuleConvertible {
+        let states: [String]
 
-    public static func requireLocalizationState(_ states: [String]) -> Rule {
-        Rule("require-localization-state") { key, value in
-            guard let localizations = value.localizations else { return nil }
+        public init(in states: [String]) {
+            self.states = states
+        }
 
-            let success = localizations.allSatisfy { key, value in
-                value.stringUnits.allSatisfy {
-                    states.contains($0.state)
+        public var rule: some RuleProtocol {
+            Rule("require-localization-state") { key, value in
+                guard let localizations = value.localizations else { return nil }
+
+                let success = localizations.allSatisfy { key, value in
+                    value.stringUnits.allSatisfy {
+                        states.contains($0.state)
+                    }
                 }
-            }
 
-            if success {
-                return nil
-            }
+                if success {
+                    return nil
+                }
 
-            if states.count == 1 {
-                return String(localized: "is not marked `\(states[0])`", bundle: .module)
-            } else {
-                return String(localized: "is not marked one of \(states.map { "`\($0)`" }.joined(separator: ", "))", bundle: .module)
+                if states.count == 1 {
+                    return String(localized: "is not marked `\(states[0])`", bundle: .module)
+                } else {
+                    return String(localized: "is not marked one of \(states.map { "`\($0)`" }.joined(separator: ", "))", bundle: .module)
+                }
             }
         }
     }
+}
 
-    public static func rejectLocalizationState(_ state: String) -> Rule {
-        Rule("reject-localization-state") { key, value in
-            guard let localizations = value.localizations else { return nil }
+extension Rules.RequireLocalizationState {
+    public init(in states: String...) {
+        self.states = states
+    }
 
-            let success = localizations.allSatisfy { key, value in
-                value.stringUnits.allSatisfy {
-                    $0.state == state
+    public init(_ state: String) {
+        self.states = [state]
+    }
+}
+
+extension Rules {
+    public struct RejectLocalizationState: RuleProtocol {
+        let states: [String]
+        public let name = "reject-localization-state"
+
+        public init(states: [String]) {
+            self.states = states
+        }
+
+        public func validate(key: String, value: Entry) -> [ValidationFailed] {
+            guard let localizations = value.localizations else { return [] }
+
+            let messages = localizations.flatMap { key, value in
+                value.stringUnits.compactMap {
+                    if states.contains($0.state) {
+                        return String(localized: "should not have state `\($0.state)`", bundle: .module)
+                    }
+                    return nil
                 }
             }
 
-            if success {
-                return String(localized: "should not have state `\(state)`", bundle: .module)
+            return messages.map {
+                ValidationFailed(key: key, value: value, rule: "reject-localization-state", message: $0)
             }
-
-            return nil
         }
     }
+}
 
-    public static let requireTranslated: Rule = requireLocalizationState("translated")
+extension Rules.RejectLocalizationState {
+    public init(states: String...) {
+        self.states = states
+    }
+
+    public init(_ state: String) {
+        self.states = [state]
+    }
 }

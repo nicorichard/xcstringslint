@@ -2,20 +2,20 @@ import StringCatalogDecodable
 
 public struct ValidationResult {
     public let key: String
-    public let validations: [RuleValidation]
+    public let validations: [ValidationFailed]
 }
 
 public struct Validator {
 
-    let rules: [Rule]
+    let rules: [RuleProtocol]
     let ignores: [Ignore]
 
-    public init(rules: [Rule]) {
+    public init(rules: [RuleProtocol]) {
         self.rules = rules
         self.ignores = []
     }
 
-    public init(rules: [Rule], ignores: Ignore...) {
+    public init(rules: [RuleProtocol], ignores: Ignore...) {
         self.rules = rules
         self.ignores = ignores
     }
@@ -27,14 +27,14 @@ public struct Validator {
             .reduce([ValidationResult]()) { acc, current in
                 let (key, value) = current
 
-                let results: [RuleValidation] = rules.flatMap { rule in
+                let results: [ValidationFailed] = rules.flatMap { rule in
                     let ignore = ignores
                         .reduce(false, { acc, ignore in
                             acc || ignore.ignore(key: key, rule: rule.name, value: value)
                         })
 
                     if ignore {
-                        return [RuleValidation]()
+                        return [ValidationFailed]()
                     }
 
                     return rule.validate(key: key, value: value)

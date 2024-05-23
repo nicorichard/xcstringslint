@@ -69,6 +69,9 @@
         }
       }
     },
+    "should not have empty state" : {
+
+    },
     "should not have state %@" : {
 
     },

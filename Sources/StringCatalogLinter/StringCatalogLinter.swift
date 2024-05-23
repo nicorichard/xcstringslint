@@ -30,28 +30,28 @@ struct StringCatalogLinter: ParsableCommand {
     func run(path: String) throws {
         let catalog = try StringCatalog.load(from: path)
 
-        var rules: [Rule] = []
+        var rules: [RuleProtocol] = []
 
         if requireManual {
             rules.append(
-                Rules.requireExtractionState(state: "manual")
+                Rules.RequireExtractionState(state: "manual")
             )
         }
 
         if requireAutomatic {
             rules.append(
-                Rules.rejectExtractionState(state: "manual")
+                Rules.RejectExtractionState(state: "manual")
             )
         }
 
         if let requireState {
             rules.append(
-                Rules.requireLocalizationState(requireState)
+                Rules.RequireLocalizationState(requireState)
             )
         }
 
         rules.append(
-            Rules.requireLocale(locales: requireLocales)
+            Rules.RequireLocale(locales: requireLocales)
         )
 
         let results = Validator(rules: rules, ignores: Ignore.default)
