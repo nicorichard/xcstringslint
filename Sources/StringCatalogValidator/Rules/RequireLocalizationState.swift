@@ -17,9 +17,9 @@ extension Rules {
                 value.stringUnits.compactMap {
                     if !states.contains($0.state) {
                         if states.count == 1 {
-                            return String(localized: "has state `\($0.state)`, expected one of \(states.joined(separator: ", "))", bundle: .module)
+                            return String(localized: "found state `\($0.state)`, expected one of \(states.joined(separator: ", "))", bundle: .module)
                         } else {
-                            return String(localized: "has state `\($0.state)`, expected \(states[0])", bundle: .module)
+                            return String(localized: "found state `\($0.state)`, expected \(states[0])", bundle: .module)
                         }
                     }
                     return nil
@@ -44,7 +44,7 @@ extension Rules {
         let states: [String]
         public let name = "reject-localization-state"
 
-        public init(states: [String]) {
+        public init(in states: [String]) {
             self.states = states
         }
 
@@ -64,7 +64,7 @@ extension Rules {
 }
 
 extension Rules.RejectLocalizationState {
-    public init(states: String...) {
+    public init(in states: String...) {
         self.states = states
     }
 

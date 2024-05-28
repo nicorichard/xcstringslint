@@ -8,12 +8,16 @@ extension Rules {
         }
 
         public func validate(key: String, value: Entry) -> [ValidationFailed] {
-            let missinglocales = locales.filter { language in
+            let missingLocales = locales.filter { language in
                 value.localizations?[language] == nil
             }
 
+            if missingLocales.isEmpty {
+                return success
+            }
+
             let message = String(
-                localized: "is missing translations for locales: \(missinglocales.joined(separator: ", "))",
+                localized: "missing translation for \(missingLocales.count) locale: \(missingLocales.joined(separator: ", "))",
                 bundle: .module
             )
 

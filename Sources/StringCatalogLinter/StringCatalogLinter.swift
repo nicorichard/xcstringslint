@@ -18,6 +18,9 @@ struct StringCatalogLinter: ParsableCommand {
     @Option(name: .customLong("state"))
     private var requireStates: [String] = []
 
+    @Option(name: .customLong("not-state"))
+    private var rejectStates: [String] = []
+
     mutating func run() throws {
         for path in paths {
             try run(path: path)
@@ -41,6 +44,12 @@ struct StringCatalogLinter: ParsableCommand {
             )
         }
 
+        if !rejectStates.isEmpty {
+            rules.append(
+                Rules.RejectLocalizationState(in: rejectStates)
+            )
+        }
+
         rules.append(
             Rules.RequireLocale(locales: requireLocales)
         )
@@ -49,7 +58,7 @@ struct StringCatalogLinter: ParsableCommand {
             .validate(catalog: catalog)
 
         for result in results {
-            print("`\(result.key)` has validation issues")
+            print("Validation failed for key: `\(result.key)`")
             for validation in result.validations {
                 print("  - \(validation.message)")
             }

@@ -13,10 +13,10 @@ extension Rules {
         public func validate(key: String, value: Entry) -> [ValidationFailed] {
             if (value.extractionState == state) { return success }
 
-            let message = switch state {
-                case .none: String(localized: "is not marked as empty", bundle: .module)
-                case .some(let state): String(localized: "is not marked as \(state)", bundle: .module)
-            }
+            let actualState = value.extractionState ?? "automatic"
+            let expectedState = state ?? "automatic"
+
+            let message = String(localized: "expected extraction state `\(expectedState)`, found `\(actualState)`", bundle: .module)
 
             return fail(message: message)
         }

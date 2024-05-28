@@ -10,7 +10,10 @@ let package = Package(
         .macOS(.v12)
     ],
     products: [
-        .executable(name: "StringCatalogLinter", targets: ["StringCatalogLinter"]),
+        .executable(
+            name: "xcstringslint",
+            targets: ["StringCatalogLinter"]
+        ),
         .plugin(
             name: "StringCatalogLinterPlugin",
             targets: ["StringCatalogLinterPlugin"]
@@ -23,12 +26,16 @@ let package = Package(
         .target(
             name: "StringCatalogValidator",
             dependencies: ["StringCatalogDecodable"],
+            resources: [
+                .process("Resources")
+            ],
             plugins: [
                 // Unfortunately we cannot use this library to meta-lint this library directly
                 // However, once we compile the library to an executable we might be able to
                 //.plugin(name: "StringCatalogLinterPlugin")
             ]
         ),
+        .testTarget(name: "StringCatalogValidatorTests", dependencies: ["StringCatalogValidator"]),
         .target(name: "StringCatalogDecodable"),
         .executableTarget(
             name: "StringCatalogLinter",

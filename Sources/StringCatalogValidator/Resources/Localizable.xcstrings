@@ -1,72 +1,32 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "has state `%@`, expected %@" : {
+    "expected extraction state `%@`, found `%@`" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "has state `%1$@`, expected %2$@"
+            "value" : "expected extraction state `%1$@`, found `%2$@`"
           }
         }
       }
     },
-    "has state `%@`, expected one of %@" : {
+    "found state `%@`, expected %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "has state `%1$@`, expected one of %2$@"
+            "value" : "found state `%1$@`, expected %2$@"
           }
         }
       }
     },
-    "is missing translations for languages keys: %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "device" : {
-              "ipod" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "is missing translations for languages keys on an ipod: %@"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "new",
-                  "value" : "is missing translations for languages keys: %@"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "is missing translations for locales: %@" : {
-      "localizations" : {
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
-    "is not marked as %@" : {
-
-    },
-    "is not marked as empty" : {
-
-    },
-    "is not marked as manual" : {
-      "extractionState" : "stale",
+    "found state `%@`, expected one of %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "translated",
-            "value" : "is not marked as manual"
+            "state" : "new",
+            "value" : "found state `%1$@`, expected one of %2$@"
           }
         }
       }
@@ -83,6 +43,28 @@
         }
       }
     },
+    "missing translation for %lld locale: %@" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "missing translation for locale: %2$@"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "missing translation for %1$lld locales: %2$@"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "should not have empty state" : {
 
     },
@@ -91,71 +73,6 @@
     },
     "should not have state `%@`" : {
 
-    },
-    "Validating catalog with %lld rules" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "device" : {
-              "iphone" : {
-                "variations" : {
-                  "plural" : {
-                    "one" : {
-                      "stringUnit" : {
-                        "state" : "needs_review",
-                        "value" : "Validating many catalogs with %lld rules"
-                      }
-                    },
-                    "other" : {
-                      "stringUnit" : {
-                        "state" : "needs_review",
-                        "value" : "Validating many catalogs with %lld rules"
-                      }
-                    }
-                  }
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "needs_review",
-                  "value" : "Validating many catalogs with %lld rules"
-                }
-              }
-            }
-          }
-        },
-        "pl" : {
-          "variations" : {
-            "device" : {
-              "iphone" : {
-                "variations" : {
-                  "plural" : {
-                    "one" : {
-                      "stringUnit" : {
-                        "state" : "needs_review",
-                        "value" : "Validating many catalogs with %lld rules"
-                      }
-                    },
-                    "other" : {
-                      "stringUnit" : {
-                        "state" : "needs_review",
-                        "value" : "Validating many catalogs with %lld rules"
-                      }
-                    }
-                  }
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "needs_review",
-                  "value" : "Validating many catalogs with %lld rules"
-                }
-              }
-            }
-          }
-        }
-      }
     },
     "wow" : {
       "extractionState" : "manual"
