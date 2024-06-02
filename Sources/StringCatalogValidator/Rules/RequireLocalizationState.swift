@@ -4,7 +4,7 @@ import StringCatalogDecodable
 extension Rules {
     public struct RequireLocalizationState: Rule {
         let states: [String]
-        public let name = "require-localization-state"
+        public static let name = "require-localization-state"
 
         public init(in states: [String]) {
             self.states = states
@@ -42,7 +42,7 @@ extension Rules.RequireLocalizationState {
 extension Rules {
     public struct RejectLocalizationState: Rule {
         let states: [String]
-        public let name = "reject-localization-state"
+        public static let name = "reject-localization-state"
 
         public init(in states: [String]) {
             self.states = states

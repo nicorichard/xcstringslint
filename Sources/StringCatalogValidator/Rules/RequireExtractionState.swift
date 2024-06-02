@@ -4,7 +4,7 @@ import StringCatalogDecodable
 extension Rules {
     public struct RequireExtractionState: Rule {
         let state: String?
-        public let name = "require-extraction-state"
+        public static let name = "require-extraction-state"
 
         public init(state: String?) {
             self.state = state
@@ -24,7 +24,7 @@ extension Rules {
 
     public struct RejectExtractionState: Rule {
         let state: String?
-        public let name = "reject-extraction-state"
+        public static let name = "reject-extraction-state"
 
         public init(state: String?) {
             self.state = state

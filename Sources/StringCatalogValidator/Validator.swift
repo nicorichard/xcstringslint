@@ -28,7 +28,7 @@ public struct Validator {
                 let (key, value) = current
 
                 let results: [Reason] = rules.flatMap { rule -> [Reason] in
-                    if shouldIgnore(key: key, rule: rule.name, value: value) {
+                    if shouldIgnore(key: key, rule: type(of: rule).name, value: value) {
                         return []
                     }
 

@@ -9,17 +9,20 @@ struct StringCatalogLinter: ParsableCommand {
     @Argument(help: "Path(s) to .xcstrings String Catalogs")
     private var paths: [String]
 
-    @Flag(name: .customLong("requireAutomatic"))
-    private var requireAutomatic: Bool = false
+    @Option(name: .customLong(Rules.RequireExtractionState.name))
+    private var requireExtractionState: String?
 
-    @Option(name: .customLong("locale"))
+    @Option(name: .customLong(Rules.RejectExtractionState.name))
+    private var rejectExtractionState: String?
+
+    @Option(name: .customLong(Rules.RequireLocale.name), parsing: .upToNextOption)
     private var requireLocales: [String] = []
 
-    @Option(name: .customLong("state"))
-    private var requireStates: [String] = []
+    @Option(name: .customLong(Rules.RequireLocalizationState.name))
+    private var requireLocalizationStates: [String] = []
 
-    @Option(name: .customLong("not-state"))
-    private var rejectStates: [String] = []
+    @Option(name: .customLong(Rules.RejectLocalizationState.name))
+    private var rejectLocalizationStates: [String] = []
 
     mutating func run() throws {
         for path in paths {
@@ -29,33 +32,8 @@ struct StringCatalogLinter: ParsableCommand {
 
     func run(path: String) throws {
         let catalog = try StringCatalog.load(from: path)
-
-        var rules: [Rule] = []
-
-        if requireAutomatic {
-            rules.append(
-                Rules.RejectExtractionState(state: "manual")
-            )
-        }
-
-        if !requireStates.isEmpty {
-            rules.append(
-                Rules.RequireLocalizationState(in: requireStates)
-            )
-        }
-
-        if !rejectStates.isEmpty {
-            rules.append(
-                Rules.RejectLocalizationState(in: rejectStates)
-            )
-        }
-
-        rules.append(
-            Rules.RequireLocale(locales: requireLocales)
-        )
-
-        let results = Validator(rules: rules, ignores: Ignore.default)
-            .validate(catalog: catalog)
+        let rules = buildRules()
+        let results = runValidation(on: catalog, with: rules)
 
         for result in results {
             print("Validation failed for key: `\(result.key)`")
@@ -72,5 +50,46 @@ struct StringCatalogLinter: ParsableCommand {
             """)
             throw ExitCode.failure
         }
+    }
+
+    func buildRules() -> [Rule] {
+        var rules: [Rule] = []
+
+        if let requireExtractionState {
+            rules.append(
+                Rules.RequireExtractionState(state: requireExtractionState)
+            )
+        }
+
+        if let rejectExtractionState {
+            rules.append(
+                Rules.RejectExtractionState(state: rejectExtractionState)
+            )
+        }
+
+        if !requireLocales.isEmpty {
+            rules.append(
+                Rules.RequireLocale(in: requireLocales)
+            )
+        }
+
+        if !requireLocalizationStates.isEmpty {
+            rules.append(
+                Rules.RequireLocalizationState(in: requireLocalizationStates)
+            )
+        }
+
+        if !rejectLocalizationStates.isEmpty {
+            rules.append(
+                Rules.RejectLocalizationState(in: rejectLocalizationStates)
+            )
+        }
+
+        return rules
+    }
+
+    func runValidation(on catalog: StringCatalog, with rules: [Rule]) -> [Validator.Validation] {
+        return Validator(rules: rules, ignores: Ignore.default)
+            .validate(catalog: catalog)
     }
 }

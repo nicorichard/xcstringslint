@@ -1,9 +1,9 @@
 extension Rules {
     public struct RequireLocale: Rule {
         let locales: [String]
-        public let name = "require-locale"
+        public static let name = "require-locale"
 
-        public init(locales: [String]) {
+        public init(in locales: [String]) {
             self.locales = locales
         }
 
