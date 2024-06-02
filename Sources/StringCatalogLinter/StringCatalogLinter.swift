@@ -33,7 +33,7 @@ struct StringCatalogLinter: ParsableCommand {
     func run(path: String) throws {
         let catalog = try StringCatalog.load(from: path)
         let rules = buildRules()
-        let results = runValidation(on: catalog, with: rules)
+        let results = validate(catalog: catalog, with: rules)
 
         for result in results {
             print("Validation failed for key: `\(result.key)`")
@@ -88,8 +88,8 @@ struct StringCatalogLinter: ParsableCommand {
         return rules
     }
 
-    func runValidation(on catalog: StringCatalog, with rules: [Rule]) -> [Validator.Validation] {
-        return Validator(rules: rules, ignores: Ignore.default)
+    func validate(catalog: StringCatalog, with rules: [Rule]) -> [Validator.Validation] {
+        Validator(rules: rules, ignores: Ignore.default)
             .validate(catalog: catalog)
     }
 }
