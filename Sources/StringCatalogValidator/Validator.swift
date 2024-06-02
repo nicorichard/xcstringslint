@@ -1,12 +1,6 @@
 import StringCatalogDecodable
 
-public struct ValidationResult {
-    public let key: String
-    public let validations: [ValidationFailed]
-}
-
 public struct Validator {
-
     let rules: [Rule]
     let ignores: [Ignore]
 
@@ -20,21 +14,22 @@ public struct Validator {
         self.ignores = ignores
     }
 
-    public func validate(catalog: StringCatalog) -> [ValidationResult] {
+    func shouldIgnore(key: String, rule: String, value: StringCatalog.Entry) -> Bool {
+        ignores.reduce(false) { acc, ignore in
+            acc || ignore.ignore(key: key, rule: rule, value: value)
+        }
+    }
+
+    public func validate(catalog: StringCatalog) -> [Validation] {
         catalog
             .strings
             .sorted { $0.key < $1.key }
-            .reduce([ValidationResult]()) { acc, current in
+            .reduce([Validation]()) { acc, current in
                 let (key, value) = current
 
-                let results: [ValidationFailed] = rules.flatMap { rule in
-                    let ignore = ignores
-                        .reduce(false, { acc, ignore in
-                            acc || ignore.ignore(key: key, rule: rule.name, value: value)
-                        })
-
-                    if ignore {
-                        return [ValidationFailed]()
+                let results: [Reason] = rules.flatMap { rule -> [Reason] in
+                    if shouldIgnore(key: key, rule: rule.name, value: value) {
+                        return []
                     }
 
                     return rule.validate(key: key, value: value)
@@ -44,7 +39,19 @@ public struct Validator {
                     return acc
                 }
 
-                return acc + [ValidationResult(key: key, validations: results)]
+                return acc + [Validation(key: key, validations: results)]
             }
+    }
+}
+
+extension Validator {
+    public struct Validation {
+        public let key: String
+        public let validations: [Reason]
+    }
+
+    public struct Reason: Equatable {
+        public let rule: String
+        public let message: String
     }
 }

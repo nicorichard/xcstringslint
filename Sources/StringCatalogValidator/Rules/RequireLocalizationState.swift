@@ -10,7 +10,7 @@ extension Rules {
             self.states = states
         }
 
-        public func validate(key: String, value: Entry) -> [ValidationFailed] {
+        public func validate(key: String, value: Entry) -> [Reason] {
             guard let localizations = value.localizations else { return success }
 
             return localizations.flatMap { key, value in
@@ -48,7 +48,7 @@ extension Rules {
             self.states = states
         }
 
-        public func validate(key: String, value: Entry) -> [ValidationFailed] {
+        public func validate(key: String, value: Entry) -> [Reason] {
             guard let localizations = value.localizations else { return success }
 
             return localizations.flatMap { key, value in

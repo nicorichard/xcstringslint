@@ -10,7 +10,7 @@ extension Rules {
             self.state = state
         }
 
-        public func validate(key: String, value: Entry) -> [ValidationFailed] {
+        public func validate(key: String, value: Entry) -> [Reason] {
             if (value.extractionState == state) { return success }
 
             let actualState = value.extractionState ?? "automatic"
@@ -30,7 +30,7 @@ extension Rules {
             self.state = state
         }
 
-        public func validate(key: String, value: Entry) -> [ValidationFailed] {
+        public func validate(key: String, value: Entry) -> [Reason] {
             if (value.extractionState != state) { return success }
 
             let message = switch state {

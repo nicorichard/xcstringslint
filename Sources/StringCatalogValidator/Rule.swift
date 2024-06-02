@@ -4,21 +4,22 @@ import StringCatalogDecodable
 public protocol Rule {
     var name: String { get }
     typealias Entry = StringCatalog.Entry
-    func validate(key: String, value: Entry) -> [ValidationFailed]
+    typealias Reason = Validator.Reason
+    func validate(key: String, value: Entry) -> [Reason]
 }
 
 extension Rule {
-    func fail(message: String) -> [ValidationFailed] {
+    func fail(message: String) -> [Reason] {
         [
-            ValidationFailed(rule: name, message: message)
+            Validator.Reason(rule: name, message: message)
         ]
     }
 
-    func fail(message: String) -> ValidationFailed {
-        ValidationFailed(rule: name, message: message)
+    func fail(message: String) -> Reason {
+        Validator.Reason(rule: name, message: message)
     }
 
-    var success: [ValidationFailed] {
+    var success: [Reason] {
         []
     }
 }

@@ -7,7 +7,7 @@ extension Rules {
             self.locales = locales
         }
 
-        public func validate(key: String, value: Entry) -> [ValidationFailed] {
+        public func validate(key: String, value: Entry) -> [Reason] {
             let missingLocales = locales.filter { language in
                 value.localizations?[language] == nil
             }
