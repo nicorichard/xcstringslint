@@ -5,7 +5,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "found state `%1$@`, expected %2$@"
           }
         }
@@ -15,7 +15,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "found state `%1$@`, expected one of %2$@"
           }
         }
@@ -56,19 +56,34 @@
       }
     },
     "should not have extraction state `%@`" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "should not have extraction state `%@`"
+          }
+        }
+      }
     },
     "should not have state %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "should not have state %@"
+          }
+        }
+      }
     },
     "should not have state `%@`" : {
-
-    },
-    "wow" : {
-      "extractionState" : "manual"
-    },
-    "zz" : {
-      "extractionState" : "manual"
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "should not have state `%@`"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

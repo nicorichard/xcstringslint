@@ -31,8 +31,7 @@ let package = Package(
                 .process("Resources")
             ],
             plugins: [
-                // Unfortunately we cannot use this library to meta-lint this library directly
-                // However, once we compile the library to an executable we might be able to
+                // TODO: Unfortunately we cannot use this library to meta-lint this library directly. However, once we compile the library to an executable we might be able to
                 //.plugin(name: "StringCatalogLinterPlugin")
             ]
         ),
