@@ -4,7 +4,7 @@ import StringCatalogDecodable
 import ArgumentParser
 
 @main
-struct StringCatalogLinter: ParsableCommand {
+struct XCStringsLint: ParsableCommand {
 
     @Argument(help: "Path(s) to .xcstrings String Catalogs")
     private var paths: [String]

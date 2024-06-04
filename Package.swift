@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "StringCatalogLinter",
+    name: "XCStringsLint",
     defaultLocalization: "en",
     platforms: [
         .macOS(.v12)
@@ -12,7 +12,7 @@ let package = Package(
     products: [
         .executable(
             name: "xcstringslint",
-            targets: ["StringCatalogLinter"]
+            targets: ["XCStringsLint"]
         ),
         .plugin(
             name: "StringCatalogLinterPlugin",
@@ -41,7 +41,7 @@ let package = Package(
         ),
         .target(name: "StringCatalogDecodable"),
         .executableTarget(
-            name: "StringCatalogLinter",
+            name: "XCStringsLint",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 "Yams",
@@ -51,7 +51,7 @@ let package = Package(
         .plugin(
             name: "StringCatalogLinterPlugin",
             capability: .buildTool(),
-            dependencies: ["StringCatalogLinter"]
+            dependencies: ["XCStringsLint"]
         )
     ]
 )
