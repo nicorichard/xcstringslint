@@ -1,16 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "expected extraction state `%@`, found `%@`" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "expected extraction state `%1$@`, found `%2$@`"
-          }
-        }
-      }
-    },
     "found state `%@`, expected %@" : {
       "localizations" : {
         "en" : {
@@ -65,7 +55,7 @@
         }
       }
     },
-    "should not have empty state" : {
+    "should not have extraction state `%@`" : {
 
     },
     "should not have state %@" : {

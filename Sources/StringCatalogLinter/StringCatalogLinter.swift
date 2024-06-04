@@ -9,6 +9,9 @@ struct StringCatalogLinter: ParsableCommand {
     @Argument(help: "Path(s) to .xcstrings String Catalogs")
     private var paths: [String]
 
+    @Option(name: .customLong("config"))
+    private var config: String?
+
     @Option(name: .customLong(Rules.RequireExtractionState.name))
     private var requireExtractionState: String?
 
@@ -32,7 +35,13 @@ struct StringCatalogLinter: ParsableCommand {
 
     func run(path: String) throws {
         let catalog = try StringCatalog.load(from: path)
-        let rules = buildRules()
+
+        let rules = if let config {
+            buildRules(using: try Config.load(from: config))
+        } else {
+            buildRules()
+        }
+
         let results = validate(catalog: catalog, with: rules)
 
         for result in results {
@@ -50,6 +59,41 @@ struct StringCatalogLinter: ParsableCommand {
             """)
             throw ExitCode.failure
         }
+    }
+
+    func buildRules(using config: Config) -> [Rule] {
+        var rules: [Rule] = []
+
+        for (ruleName, rule) in config.rules {
+            switch ruleName {
+            case Rules.RequireExtractionState.name:
+                rules.append(
+                    Rules.RequireExtractionState(in: rule.values)
+                )
+            case Rules.RejectExtractionState.name:
+                rules.append(
+                    Rules.RejectExtractionState(in: rule.values)
+                )
+            case Rules.RequireLocale.name:
+                rules.append(
+                    Rules.RequireLocale(in: rule.values)
+                )
+            case Rules.RequireLocalizationState.name:
+                rules.append(
+                    Rules.RequireLocalizationState(in: rule.values)
+                )
+            case Rules.RejectLocalizationState.name:
+                rules.append(
+                    Rules.RejectLocalizationState(in: rule.values)
+                )
+            default:
+                break
+            }
+        }
+
+        rules.append(contentsOf: buildRules())
+
+        return rules
     }
 
     func buildRules() -> [Rule] {

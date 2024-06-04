@@ -27,7 +27,7 @@ extension Rules {
 }
 
 extension Rules.RequireLocale {
-    public init(locales: String...) {
+    public init(in locales: String...) {
         self.locales = locales
     }
 }

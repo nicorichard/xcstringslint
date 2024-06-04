@@ -21,6 +21,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0"),
+        .package(url: "https://github.com/jpsim/Yams", from: "5.1.2")
     ],
     targets: [
         .target(
@@ -35,12 +36,16 @@ let package = Package(
                 //.plugin(name: "StringCatalogLinterPlugin")
             ]
         ),
-        .testTarget(name: "StringCatalogValidatorTests", dependencies: ["StringCatalogValidator"]),
+        .testTarget(
+            name: "StringCatalogValidatorTests",
+            dependencies: ["StringCatalogValidator"]
+        ),
         .target(name: "StringCatalogDecodable"),
         .executableTarget(
             name: "StringCatalogLinter",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                "Yams",
                 "StringCatalogValidator",
             ]
         ),

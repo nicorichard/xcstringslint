@@ -3,40 +3,61 @@ import StringCatalogDecodable
 
 extension Rules {
     public struct RequireExtractionState: Rule {
-        let state: String?
+        let states: [String]
         public static let name = "require-extraction-state"
 
+        public init(in states: [String]) {
+            self.states = states
+        }
+
+        public init(in states: String...) {
+            self.states = states
+        }
+
         public init(state: String?) {
-            self.state = state
+            self.states = [state ?? Self.defaultExtractionState]
+        }
+
+        static var defaultExtractionState: String {
+            ExtractionState.automatic.rawValue
         }
 
         public func validate(key: String, value: Entry) -> [Reason] {
-            if (value.extractionState == state) { return success }
+            let actualState = value.extractionState ?? Self.defaultExtractionState
 
-            let actualState = value.extractionState ?? "automatic"
-            let expectedState = state ?? "automatic"
+            if (states.contains(actualState)) { return success }
 
-            let message = String(localized: "expected extraction state `\(expectedState)`, found `\(actualState)`", bundle: .module)
+            let message = String(localized: "should not have extraction state `\(actualState)`", bundle: .module)
 
             return fail(message: message)
         }
     }
 
     public struct RejectExtractionState: Rule {
-        let state: String?
+        let states: [String]
         public static let name = "reject-extraction-state"
 
         public init(state: String?) {
-            self.state = state
+            self.states = [state ?? Self.defaultExtractionState]
+        }
+
+        public init(in states: [String]) {
+            self.states = states
+        }
+
+        public init(in states: String...) {
+            self.states = states
+        }
+
+        static var defaultExtractionState: String {
+            ExtractionState.automatic.rawValue
         }
 
         public func validate(key: String, value: Entry) -> [Reason] {
-            if (value.extractionState != state) { return success }
+            let state = value.extractionState ?? Self.defaultExtractionState
+            if (!states.contains(state)) { return success }
 
-            let message = switch state {
-                case .none: String(localized: "should not have empty state", bundle: .module)
-                case .some(let state): String(localized: "should not have state \(state)", bundle: .module)
-            }
+            let message = String(localized: "should not have state \(state)", bundle: .module)
 
             return fail(message: message)
         }

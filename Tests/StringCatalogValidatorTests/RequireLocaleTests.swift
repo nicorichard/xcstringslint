@@ -3,7 +3,7 @@ import StringCatalogValidator
 
 class RequireLocaleTests: XCTestCase {
     func testRequireLocale_givenNoVariations_aSingleLocale_andAMatch_succeeds() throws {
-        let sut = Rules.RequireLocale(locales: ["en"])
+        let sut = Rules.RequireLocale(in: "en")
 
         let json = """
         {
@@ -23,7 +23,7 @@ class RequireLocaleTests: XCTestCase {
     }
 
     func testRequireLocale_givenNoVariations_aSingleLocale_andNoMatch_fails() throws {
-        let sut = Rules.RequireLocale(locales: ["fr"])
+        let sut = Rules.RequireLocale(in: "fr")
 
         let json = """
         {
@@ -43,7 +43,7 @@ class RequireLocaleTests: XCTestCase {
     }
 
     func testRequireLocale_givenNoVariations_multipleLocales_andFullMatch_succeeds() throws {
-        let sut = Rules.RequireLocale(locales: ["en", "fr"])
+        let sut = Rules.RequireLocale(in: "en", "fr")
 
         let json = """
         {
@@ -69,7 +69,7 @@ class RequireLocaleTests: XCTestCase {
     }
 
     func testRequireLocale_givenNoVariations_multipleLocales_andPartialMatch_fails() throws {
-        let sut = Rules.RequireLocale(locales: ["en", "de"])
+        let sut = Rules.RequireLocale(in: "en", "de")
 
         let json = """
         {
@@ -95,7 +95,7 @@ class RequireLocaleTests: XCTestCase {
     }
 
     func testRequireLocale_givenVariations_andMatchingLocale_succeeds() throws {
-        let sut = Rules.RequireLocale(locales: ["en"])
+        let sut = Rules.RequireLocale(in: "en")
 
         let json = """
         {
@@ -127,7 +127,7 @@ class RequireLocaleTests: XCTestCase {
     }
 
     func testRequireLocale_givenVariations_andNoMatch_fails() throws {
-        let sut = Rules.RequireLocale(locales: ["zh"])
+        let sut = Rules.RequireLocale(in: "zh")
 
         let json = """
         {

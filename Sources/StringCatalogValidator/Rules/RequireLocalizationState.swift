@@ -10,6 +10,14 @@ extension Rules {
             self.states = states
         }
 
+        public init(in states: String...) {
+            self.states = states
+        }
+
+        public init(_ state: String) {
+            self.states = [state]
+        }
+
         public func validate(key: String, value: Entry) -> [Reason] {
             guard let localizations = value.localizations else { return success }
 
@@ -29,16 +37,6 @@ extension Rules {
     }
 }
 
-extension Rules.RequireLocalizationState {
-    public init(in states: String...) {
-        self.states = states
-    }
-
-    public init(_ state: String) {
-        self.states = [state]
-    }
-}
-
 extension Rules {
     public struct RejectLocalizationState: Rule {
         let states: [String]
@@ -46,6 +44,14 @@ extension Rules {
 
         public init(in states: [String]) {
             self.states = states
+        }
+
+        public init(in states: String...) {
+            self.states = states
+        }
+
+        public init(_ state: String) {
+            self.states = [state]
         }
 
         public func validate(key: String, value: Entry) -> [Reason] {
@@ -60,15 +66,5 @@ extension Rules {
                 }
             }.map(fail)
         }
-    }
-}
-
-extension Rules.RejectLocalizationState {
-    public init(in states: String...) {
-        self.states = states
-    }
-
-    public init(_ state: String) {
-        self.states = [state]
     }
 }
