@@ -1,0 +1,14 @@
+name: Validate
+on:
+  push:
+
+jobs:
+  lint:
+    name: Lint xcstrings
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: lint xcstrings
+        run: |
+          swift run xcstringslint Sources/StringCatalogValidator/Resources/Localizable.xcstrings \
+            --config .xcstringslint.yaml
