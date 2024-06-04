@@ -1,0 +1,7 @@
+rules:
+    require-extraction-state:
+        value: "automatic"
+    require-locale:
+        value: "en"
+    require-localization-state:
+        value: "translated"
