@@ -31,9 +31,9 @@ See [this repository's actions for an example](.github/workflows/lint.yaml)
 
 ## Example
 
-`swift run xcstringslint Sources/StringCatalogValidator/Resources/Localizable.xcstrings --require-locale en fr`
-
 ```
+$ swift run xcstringslint Sources/StringCatalogValidator/Resources/Localizable.xcstrings --require-locale en fr
+
 Validation failed for key: `found state `%@`, expected %@`
   - missing translation for 1 locale: fr
 Validation failed for key: `found state `%@`, expected one of %@`
