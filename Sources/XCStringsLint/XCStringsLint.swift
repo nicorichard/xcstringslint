@@ -21,10 +21,10 @@ struct XCStringsLint: ParsableCommand {
     @Option(name: .customLong(Rules.RequireLocale.name), parsing: .upToNextOption)
     private var requireLocales: [String] = []
 
-    @Option(name: .customLong(Rules.RequireLocalizationState.name))
+    @Option(name: .customLong(Rules.RequireLocalizationState.name), parsing: .upToNextOption)
     private var requireLocalizationStates: [String] = []
 
-    @Option(name: .customLong(Rules.RejectLocalizationState.name))
+    @Option(name: .customLong(Rules.RejectLocalizationState.name), parsing: .upToNextOption)
     private var rejectLocalizationStates: [String] = []
 
     mutating func run() throws {
