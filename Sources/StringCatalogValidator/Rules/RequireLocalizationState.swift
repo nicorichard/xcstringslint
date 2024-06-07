@@ -18,8 +18,20 @@ extension Rules {
             self.states = [state]
         }
 
+        static var emptyLocalizationState: String {
+            "empty"
+        }
+
         public func validate(key: String, value: Entry) -> [Reason] {
-            guard let localizations = value.localizations else { return success }
+            guard let localizations = value.localizations else {
+                if states.contains(Self.emptyLocalizationState) {
+                    return success
+                }
+
+                return fail(
+                    message: String(localized: "no translation state found", bundle: .module)
+                )
+            }
 
             return localizations.flatMap { key, value in
                 value.stringUnits.compactMap {

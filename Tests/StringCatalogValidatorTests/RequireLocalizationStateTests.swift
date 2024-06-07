@@ -2,6 +2,15 @@ import XCTest
 import StringCatalogValidator
 
 class RequireLocalizationStateTests: XCTestCase {
+    func test_RequireLocalizationState_empty_succeeds() throws {
+        let sut = Rules.RequireLocalizationState("empty")
+
+        let json = "{}"
+
+        let result = sut.validate(key: "key", value: try EntryDecoder.entry(from: json))
+        XCTAssertEqual(result, [])
+    }
+
     func test_RequireLocalizationState_withNoVariations_andMatchingState_succeeds() throws {
         let sut = Rules.RequireLocalizationState("translated")
 
