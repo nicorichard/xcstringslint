@@ -5,7 +5,7 @@ let toolName = "XCStringsLint"
 let configRegex = try! Regex("\\.?xcstringslint\\.ya?ml")
 
 @main
-struct SwiftLintPlugin: BuildToolPlugin {
+struct StringCatalogLinterPlugin: BuildToolPlugin {
     func createBuildCommands(context: PluginContext, target: Target) async throws -> [Command] {
         let targets = context.package.targets.filter { $0 is SourceModuleTarget }
         return try targets.flatMap { try commandsForTarget(context: context, target: $0) }
@@ -50,9 +50,10 @@ struct SwiftLintPlugin: BuildToolPlugin {
 }
 
 #if canImport(XcodeProjectPlugin)
+
 import XcodeProjectPlugin
 
-extension SwiftLintPlugin: XcodeBuildToolPlugin {
+extension StringCatalogLinterPlugin: XcodeBuildToolPlugin {
 
     func createBuildCommands(context: XcodePluginContext, target: XcodeTarget) throws -> [Command] {
         let toolPath = try context.tool(named: toolName).path
