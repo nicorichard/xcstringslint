@@ -1,7 +1,8 @@
 import Foundation
 import PackagePlugin
 
-let toolName = "StringCatalogLinter"
+let toolName = "XCStringsLint"
+let configRegex = try! Regex("\\.?xcstringslint\\.ya?ml")
 
 @main
 struct SwiftLintPlugin: BuildToolPlugin {
@@ -14,25 +15,37 @@ struct SwiftLintPlugin: BuildToolPlugin {
         let toolPath = try context.tool(named: toolName).path
         let displayName = "Running String Catalog linter for \(target.name)"
 
+        let config = target.sourceModule?.sourceFiles.filter {
+            $0.path.lastComponent.contains(configRegex)
+        } ?? []
+
+        if config.isEmpty {
+            Diagnostics.error("No configuration file found in \(target.name). Expected a configuration file matching `xcstringslint.yml`.")
+        } else if config.count > 1 {
+            Diagnostics.error("Multiple configuration files found for \(target.name)")
+        }
+
         let catalogs = target.sourceModule?.sourceFiles.filter {
             $0.path.lastComponent.hasSuffix(".xcstrings")
         } ?? []
 
         if catalogs.isEmpty {
             Diagnostics.warning("No xcstrings files found in \(target.name)")
+            return [] // no-op
         }
 
-        return catalogs.map { catalog in
-            let arguments: [CustomStringConvertible] = [
-                catalogs.first!.path
-            ]
+        let arguments: [CustomStringConvertible] = [
+            "--config", config.first!.path
+        ] + catalogs.map(\.path)
 
-            return .buildCommand(
+        return [
+            .buildCommand(
                 displayName: displayName,
                 executable: toolPath,
-                arguments: arguments
+                arguments: arguments,
+                inputFiles: catalogs.map(\.path)
             )
-        }
+        ]
     }
 }
 
@@ -40,10 +53,21 @@ struct SwiftLintPlugin: BuildToolPlugin {
 import XcodeProjectPlugin
 
 extension SwiftLintPlugin: XcodeBuildToolPlugin {
+
     func createBuildCommands(context: XcodePluginContext, target: XcodeTarget) throws -> [Command] {
         let toolPath = try context.tool(named: toolName).path
 
         let displayName = "Running String Catalog linter for \(target.displayName)"
+
+        let config = target.inputFiles.filter {
+            $0.path.lastComponent.contains(configRegex)
+        }
+
+        if config.isEmpty {
+            Diagnostics.error("No configuration file found in \(target.displayName). Expected a configuration file matching `xcstringslint.yml`.")
+        } else if config.count > 1 {
+            Diagnostics.error("Multiple configuration files found for \(target.displayName)")
+        }
 
         let catalogs = target.inputFiles.filter {
             $0.path.lastComponent.hasSuffix(".xcstrings")
@@ -51,19 +75,21 @@ extension SwiftLintPlugin: XcodeBuildToolPlugin {
 
         if catalogs.isEmpty {
             Diagnostics.warning("No xcstrings files found in \(target.displayName)")
+            return [] // no-op
         }
 
-        return catalogs.map { catalog in
-            let arguments: [CustomStringConvertible] = [
-                catalog.path
-            ]
+        let arguments: [CustomStringConvertible] = [
+            "--config", config.first!.path
+        ] + catalogs.map(\.path)
 
-            return .buildCommand(
+        return [
+            .buildCommand(
                 displayName: displayName,
                 executable: toolPath,
-                arguments: arguments
+                arguments: arguments,
+                inputFiles: catalogs.map(\.path)
             )
-        }
+        ]
     }
 }
 
