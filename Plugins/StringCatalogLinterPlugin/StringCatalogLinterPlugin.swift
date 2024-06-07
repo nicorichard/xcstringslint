@@ -7,6 +7,8 @@ let configRegex = try! Regex("\\.?xcstringslint\\.ya?ml")
 @main
 struct StringCatalogLinterPlugin: BuildToolPlugin {
 
+    let fileManager = FileManager()
+
     enum Error: Swift.Error, CustomStringConvertible {
         case incorrectTargetType
         case missingConfigFile
@@ -32,19 +34,36 @@ struct StringCatalogLinterPlugin: BuildToolPlugin {
         return try commandsForTarget(context: context, target: target)
     }
 
+    private func configPath(rootPath: Path, targetFiles: FileList?) throws -> String {
+        let rootConfigs = try fileManager
+            .contentsOfDirectory(atPath: rootPath.string)
+            .filter({ $0.contains(configRegex) })
+
+        let targetConfigs = targetFiles?
+            .filter({ $0.path.lastComponent.contains(configRegex) })
+            .map(\.path.string) ?? []
+
+        if !targetConfigs.isEmpty && !rootConfigs.isEmpty {
+            Diagnostics.remark("Found target config. Overriding root config.")
+        }
+
+        let config = (targetConfigs + rootConfigs).first
+
+        if config == nil {
+            throw Error.missingConfigFile
+        } else if targetConfigs.count > 1 || rootConfigs.count > 1 {
+            throw Error.multipleConfigFiles
+        }
+
+        Diagnostics.remark("Running xcstringslint using config file found at: \(config!)")
+        return config!
+    }
+
     private func commandsForTarget(context: PluginContext, target: Target) throws -> [Command] {
         let toolPath = try context.tool(named: toolName).path
         let displayName = "Running String Catalog linter for \(target.name)"
 
-        let config = target.sourceModule?.sourceFiles.filter {
-            $0.path.lastComponent.contains(configRegex)
-        } ?? []
-
-        if config.isEmpty {
-            throw Error.missingConfigFile
-        } else if config.count > 1 {
-            throw Error.multipleConfigFiles
-        }
+        let config = try configPath(rootPath: context.package.directory, targetFiles: target.sourceModule?.sourceFiles)
 
         let catalogs = target.sourceModule?.sourceFiles.filter {
             $0.path.lastComponent.hasSuffix(".xcstrings")
@@ -56,7 +75,7 @@ struct StringCatalogLinterPlugin: BuildToolPlugin {
         }
 
         let arguments: [CustomStringConvertible] = [
-            "--config", config.first!.path
+            "--config", config
         ] + catalogs.map(\.path)
 
         return [
@@ -64,7 +83,8 @@ struct StringCatalogLinterPlugin: BuildToolPlugin {
                 displayName: displayName,
                 executable: toolPath,
                 arguments: arguments,
-                inputFiles: catalogs.map(\.path)
+                inputFiles: catalogs.map(\.path),
+                outputFiles: []
             )
         ]
     }
@@ -81,15 +101,10 @@ extension StringCatalogLinterPlugin: XcodeBuildToolPlugin {
 
         let displayName = "Running String Catalog linter for \(target.displayName)"
 
-        let config = target.inputFiles.filter {
-            $0.path.lastComponent.contains(configRegex)
-        }
-
-        if config.isEmpty {
-            throw Error.missingConfigFile
-        } else if config.count > 1 {
-            throw Error.multipleConfigFiles
-        }
+        let config = try configPath(
+            rootPath: context.xcodeProject.directory,
+            targetFiles: target.inputFiles
+        )
 
         let catalogs = target.inputFiles.filter {
             $0.path.lastComponent.hasSuffix(".xcstrings")
@@ -101,7 +116,7 @@ extension StringCatalogLinterPlugin: XcodeBuildToolPlugin {
         }
 
         let arguments: [CustomStringConvertible] = [
-            "--config", config.first!.path
+            "--config", config
         ] + catalogs.map(\.path)
 
         return [
@@ -109,7 +124,8 @@ extension StringCatalogLinterPlugin: XcodeBuildToolPlugin {
                 displayName: displayName,
                 executable: toolPath,
                 arguments: arguments,
-                inputFiles: catalogs.map(\.path)
+                inputFiles: catalogs.map(\.path),
+                outputFiles: []
             )
         ]
     }

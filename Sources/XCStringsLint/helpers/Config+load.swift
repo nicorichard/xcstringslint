@@ -7,7 +7,7 @@ extension Config {
         let fileManager = FileManager.default
 
         guard fileManager.fileExists(atPath: path) else {
-            throw ValidationError("Could not find xcstrings catalog at path: \(path)")
+            throw ValidationError("No xcstringslint config file could be found at path: \(path)")
         }
 
         let data = try Data(contentsOf: URL(fileURLWithPath: path))
