@@ -4,6 +4,7 @@ import StringCatalogDecodable
 extension Rules {
     public struct RequireLocalizationState: Rule {
         let states: [String]
+        public var severity: Severity = .error
         public static let name = "require-localization-state"
 
         public init(in states: [String]) {
@@ -22,7 +23,7 @@ extension Rules {
             "empty"
         }
 
-        public func validate(key: String, value: Entry) -> [Reason] {
+        public func validate(key: String, value: Entry) -> [Failure] {
             guard let localizations = value.localizations else {
                 if states.contains(Self.emptyLocalizationState) {
                     return success
@@ -52,6 +53,7 @@ extension Rules {
 extension Rules {
     public struct RejectLocalizationState: Rule {
         let states: [String]
+        public var severity: Severity = .error
         public static let name = "reject-localization-state"
 
         public init(in states: [String]) {
@@ -66,7 +68,7 @@ extension Rules {
             self.states = [state]
         }
 
-        public func validate(key: String, value: Entry) -> [Reason] {
+        public func validate(key: String, value: Entry) -> [Failure] {
             guard let localizations = value.localizations else { return success }
 
             return localizations.flatMap { key, value in

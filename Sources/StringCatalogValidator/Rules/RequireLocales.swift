@@ -1,13 +1,14 @@
 extension Rules {
     public struct RequireLocale: Rule {
         let locales: [String]
+        public var severity: Severity = .error
         public static let name = "require-locale"
 
         public init(in locales: [String]) {
             self.locales = locales
         }
 
-        public func validate(key: String, value: Entry) -> [Reason] {
+        public func validate(key: String, value: Entry) -> [Failure] {
             let missingLocales = locales.filter { language in
                 value.localizations?[language] == nil
             }
