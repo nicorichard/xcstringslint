@@ -39,7 +39,9 @@ let package = Package(
             name: "StringCatalogValidatorTests",
             dependencies: ["StringCatalogValidator"]
         ),
-        .target(name: "StringCatalogDecodable"),
+        .target(
+            name: "StringCatalogDecodable"
+        ),
         .executableTarget(
             name: "XCStringsLint",
             dependencies: [
