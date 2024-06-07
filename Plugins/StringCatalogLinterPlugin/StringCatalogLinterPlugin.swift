@@ -6,9 +6,30 @@ let configRegex = try! Regex("\\.?xcstringslint\\.ya?ml")
 
 @main
 struct StringCatalogLinterPlugin: BuildToolPlugin {
+
+    enum Error: Swift.Error, CustomStringConvertible {
+        case incorrectTargetType
+        case missingConfigFile
+        case multipleConfigFiles
+
+        var description: String {
+            switch self {
+            case .incorrectTargetType:
+                return "Incorrect target type. Expected a source module target."
+            case .missingConfigFile:
+                return "No configuration file found in target. Expected a configuration file matching `xcstringslint.yml`."
+            case .multipleConfigFiles:
+                return "Multiple configuration files found in target."
+            }
+        }
+    }
+
     func createBuildCommands(context: PluginContext, target: Target) async throws -> [Command] {
-        let targets = context.package.targets.filter { $0 is SourceModuleTarget }
-        return try targets.flatMap { try commandsForTarget(context: context, target: $0) }
+        guard target is SourceModuleTarget else {
+            throw Error.incorrectTargetType
+        }
+
+        return try commandsForTarget(context: context, target: target)
     }
 
     private func commandsForTarget(context: PluginContext, target: Target) throws -> [Command] {
@@ -20,9 +41,9 @@ struct StringCatalogLinterPlugin: BuildToolPlugin {
         } ?? []
 
         if config.isEmpty {
-            Diagnostics.error("No configuration file found in \(target.name). Expected a configuration file matching `xcstringslint.yml`.")
+            throw Error.missingConfigFile
         } else if config.count > 1 {
-            Diagnostics.error("Multiple configuration files found for \(target.name)")
+            throw Error.multipleConfigFiles
         }
 
         let catalogs = target.sourceModule?.sourceFiles.filter {
@@ -65,9 +86,9 @@ extension StringCatalogLinterPlugin: XcodeBuildToolPlugin {
         }
 
         if config.isEmpty {
-            Diagnostics.error("No configuration file found in \(target.displayName). Expected a configuration file matching `xcstringslint.yml`.")
+            throw Error.missingConfigFile
         } else if config.count > 1 {
-            Diagnostics.error("Multiple configuration files found for \(target.displayName)")
+            throw Error.multipleConfigFiles
         }
 
         let catalogs = target.inputFiles.filter {
