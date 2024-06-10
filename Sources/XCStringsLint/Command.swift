@@ -4,7 +4,7 @@ import StringCatalogDecodable
 import ArgumentParser
 
 @main
-struct XCStringsLint: ParsableCommand {
+struct Command: ParsableCommand {
 
     @Argument(help: "Path(s) to .xcstrings String Catalogs")
     private var paths: [String]
@@ -42,72 +42,10 @@ struct XCStringsLint: ParsableCommand {
             buildRules()
         }
 
-        let results = validate(catalog: catalog, with: rules)
+        let results = Validator(rules: rules, ignores: Ignore.default)
+            .validate(catalog: catalog)
 
-        for result in results {
-            if result.validations.map(\.rule.severity).contains(.error) {
-                print("[Error] Validation failed for key: `\(result.key)`")
-            } else {
-                print("[Warning] Validation failed for key: `\(result.key)`")
-            }
-
-            for validation in result.validations {
-                print("  - \(validation.message)")
-            }
-        }
-
-        let errorCount = results.flatMap { result in
-            result.validations
-        }
-            .filter { $0.rule.severity == .error }
-
-        if !errorCount.isEmpty {
-            print("""
-
-            [Error]: Found \(results.count) validation issues, \(errorCount) serious in catalog: \(path)
-
-            """)
-            throw ExitCode.failure
-        } else {
-            print("""
-
-            [Warning]: Found \(results.count) validation issues in catalog: \(path)
-
-            """)
-        }
-    }
-
-    func buildRules(using config: Config) throws -> [Rule] {
-        var rules = try config.rules.compactMap { (ruleName, rule) -> Rule? in
-            switch ruleName {
-            case Rules.RequireExtractionState.name:
-                var domainRule = Rules.RequireExtractionState(in: rule.values)
-                domainRule.severity = rule.severity.toDomain()
-                return domainRule
-            case Rules.RejectExtractionState.name:
-                var domainRule = Rules.RejectExtractionState(in: rule.values)
-                domainRule.severity = rule.severity.toDomain()
-                return domainRule
-            case Rules.RequireLocale.name:
-                var domainRule = Rules.RequireLocale(in: rule.values)
-                domainRule.severity = rule.severity.toDomain()
-                return domainRule
-            case Rules.RequireLocalizationState.name:
-                var domainRule = Rules.RequireLocalizationState(in: rule.values)
-                domainRule.severity = rule.severity.toDomain()
-                return domainRule
-            case Rules.RejectLocalizationState.name:
-                var domainRule = Rules.RejectLocalizationState(in: rule.values)
-                domainRule.severity = rule.severity.toDomain()
-                return domainRule
-            default:
-                throw ValidationError("Unknown rule: \(ruleName)")
-            }
-        }
-
-        rules.append(contentsOf: buildRules())
-
-        return rules
+        try Reporter().printReport(results: results, path: path)
     }
 
     func buildRules() -> [Rule] {
@@ -146,8 +84,36 @@ struct XCStringsLint: ParsableCommand {
         return rules
     }
 
-    func validate(catalog: StringCatalog, with rules: [Rule]) -> [Validator.Validation] {
-        Validator(rules: rules, ignores: Ignore.default)
-            .validate(catalog: catalog)
+    func buildRules(using config: Config) throws -> [Rule] {
+        var rules = try config.rules.compactMap { (ruleName, rule) -> Rule? in
+            switch ruleName {
+            case Rules.RequireExtractionState.name:
+                var domainRule = Rules.RequireExtractionState(in: rule.values)
+                domainRule.severity = rule.severity.toDomain()
+                return domainRule
+            case Rules.RejectExtractionState.name:
+                var domainRule = Rules.RejectExtractionState(in: rule.values)
+                domainRule.severity = rule.severity.toDomain()
+                return domainRule
+            case Rules.RequireLocale.name:
+                var domainRule = Rules.RequireLocale(in: rule.values)
+                domainRule.severity = rule.severity.toDomain()
+                return domainRule
+            case Rules.RequireLocalizationState.name:
+                var domainRule = Rules.RequireLocalizationState(in: rule.values)
+                domainRule.severity = rule.severity.toDomain()
+                return domainRule
+            case Rules.RejectLocalizationState.name:
+                var domainRule = Rules.RejectLocalizationState(in: rule.values)
+                domainRule.severity = rule.severity.toDomain()
+                return domainRule
+            default:
+                throw ValidationError("Unknown rule: \(ruleName)")
+            }
+        }
+
+        rules.append(contentsOf: buildRules())
+
+        return rules
     }
 }
