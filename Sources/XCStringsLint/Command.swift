@@ -45,7 +45,7 @@ struct Command: ParsableCommand {
         let results = Validator(rules: rules, ignores: Ignore.default)
             .validate(catalog: catalog)
 
-        try Reporter().printReport(results: results, path: path)
+        try XcodeReporter(path: path).report(results: results)
     }
 
     func buildRules() -> [Rule] {
