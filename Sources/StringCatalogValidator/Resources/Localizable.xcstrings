@@ -56,7 +56,14 @@
       }
     },
     "no translation state found" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no translation state found"
+          }
+        }
+      }
     },
     "should not have extraction state `%@`" : {
       "localizations" : {
