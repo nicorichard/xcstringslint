@@ -28,16 +28,17 @@ struct XcodeReporter: Reporter {
             }
         }
 
-        let errors = results.flatMap { result in
+        let validations = results.flatMap { result in
             result.validations
         }
-            .filter { $0.rule.severity == .error }
+
+        let errors = validations.filter { $0.rule.severity == .error }
 
         if !errors.isEmpty {
-            print(level: .error, "Found \(results.count) total xcstringlint issues, \(errors.count) serious")
+            print(level: .error, "Found \(validations.count) total xcstringlint issues in \(results.count) keys, \(errors.count) serious")
             throw ExitCode.failure
         } else if !results.isEmpty {
-            print(level: .warning, "Found \(results.count) total xcstringlint issues")
+            print(level: .warning, "Found \(validations.count) total xcstringlint issues in \(results.count) keys")
         }
     }
 }

@@ -26,16 +26,17 @@ struct CommandLineReporter: Reporter {
             }
         }
 
-        let errors = results.flatMap { result in
+        let validations = results.flatMap { result in
             result.validations
         }
-            .filter { $0.rule.severity == .error }
+
+        let errors = validations.filter { $0.rule.severity == .error }
 
         if !errors.isEmpty {
-            print("Found \(results.count) total xcstringlint issues, \(errors.count) serious")
+            print("Found \(results.count) total xcstringlint issues in \(results.count) keys, \(errors.count) serious")
             throw ExitCode.failure
         } else if !results.isEmpty {
-            print("Found \(results.count) total xcstringlint issues")
+            print("Found \(results.count) total xcstringlint issues in \(results.count) keys")
         }
     }
 }
