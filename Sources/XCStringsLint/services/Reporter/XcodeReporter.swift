@@ -3,7 +3,7 @@ import StringCatalogValidator
 import StringCatalogDecodable
 import ArgumentParser
 
-struct XcodeReporter {
+struct XcodeReporter: Reporter {
     private let print: Printer
     let path: String
 
@@ -28,13 +28,13 @@ struct XcodeReporter {
             }
         }
 
-        let errorCount = results.flatMap { result in
+        let errors = results.flatMap { result in
             result.validations
         }
             .filter { $0.rule.severity == .error }
 
-        if !errorCount.isEmpty {
-            print(level: .error, "Found \(results.count) total xcstringlint issues, \(errorCount) serious")
+        if !errors.isEmpty {
+            print(level: .error, "Found \(results.count) total xcstringlint issues, \(errors.count) serious")
             throw ExitCode.failure
         } else if !results.isEmpty {
             print(level: .warning, "Found \(results.count) total xcstringlint issues")

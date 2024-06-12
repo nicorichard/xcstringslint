@@ -27,6 +27,9 @@ struct Command: ParsableCommand {
     @Option(name: .customLong(Rules.RejectLocalizationState.name), parsing: .upToNextOption)
     private var rejectLocalizationStates: [String] = []
 
+    @Option
+    private var reporter: ReporterFactory = .xcode
+
     mutating func run() throws {
         for path in paths {
             try run(path: path)
@@ -45,7 +48,8 @@ struct Command: ParsableCommand {
         let results = Validator(rules: rules, ignores: Ignore.default)
             .validate(catalog: catalog)
 
-        try XcodeReporter(path: path).report(results: results)
+        try reporter.build(path: path)
+            .report(results: results)
     }
 
     func buildRules() -> [Rule] {
