@@ -16,12 +16,12 @@ struct StringCatalogLinterPlugin: BuildToolPlugin {
 
         var description: String {
             switch self {
-            case .incorrectTargetType:
-                return "Incorrect target type. Expected a source module target."
-            case .missingConfigFile:
-                return "No configuration file found in target. Expected a configuration file matching `xcstringslint.yml`."
-            case .multipleConfigFiles:
-                return "Multiple configuration files found in target."
+                case .incorrectTargetType:
+                    return "Incorrect target type. Expected a source module target."
+                case .missingConfigFile:
+                    return "No configuration file found in target. Expected a configuration file matching `xcstringslint.yml`."
+                case .multipleConfigFiles:
+                    return "Multiple configuration files found in target."
             }
         }
     }
