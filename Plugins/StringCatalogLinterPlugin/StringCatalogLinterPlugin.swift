@@ -82,9 +82,7 @@ struct StringCatalogLinterPlugin: BuildToolPlugin {
             .buildCommand(
                 displayName: displayName,
                 executable: toolPath,
-                arguments: arguments,
-                inputFiles: catalogs.map(\.path),
-                outputFiles: []
+                arguments: arguments
             )
         ]
     }
@@ -123,9 +121,7 @@ extension StringCatalogLinterPlugin: XcodeBuildToolPlugin {
             .buildCommand(
                 displayName: displayName,
                 executable: toolPath,
-                arguments: arguments,
-                inputFiles: catalogs.map(\.path),
-                outputFiles: []
+                arguments: arguments
             )
         ]
     }
