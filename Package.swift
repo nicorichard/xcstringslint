@@ -7,7 +7,7 @@ let package = Package(
     name: "XCStringsLint",
     defaultLocalization: "en",
     platforms: [
-        .macOS(.v12)
+        .macOS(.v13)
     ],
     products: [
         .executable(

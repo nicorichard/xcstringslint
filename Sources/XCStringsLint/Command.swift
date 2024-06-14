@@ -10,8 +10,7 @@ struct Command: ParsableCommand {
     private var paths: [String]
 
     @Option(name: .customLong("config"))
-    // TODO: if null, find the file in the current directory
-    private var configPath: String
+    private var configPath: String?
 
     @Option
     private var reporter: ReporterFactory = .xcode
@@ -24,7 +23,7 @@ struct Command: ParsableCommand {
 
     func run(path: String) throws {
         let catalog = try StringCatalog.load(from: path)
-        let config = try Config.load(from: configPath)
+        let config = try Config.load(from: resolveConfigFilePath())
         let rules = try config.toDomain()
 
         let results = Validator(rules: rules, ignores: Ignore.default)
@@ -34,3 +33,44 @@ struct Command: ParsableCommand {
             .report(results: results)
     }
 }
+
+// MARK: - Config Resolving
+
+extension Command {
+    private func findConfig(atPath path: String) throws -> String? {
+        try FileManager.default
+            .contentsOfDirectory(atPath: path)
+            .filter({ $0.contains(configRegex) })
+            .first
+    }
+
+    func resolveConfigFilePath() throws -> String {
+        let found: String?
+
+        if let configPath {
+            if FileManager.default.isDirectory(atPath: configPath) {
+                found = try findConfig(atPath: configPath)
+            } else {
+                found = configPath
+            }
+        } else {
+            found = try findConfig(atPath: FileManager.default.currentDirectoryPath)
+        }
+
+        guard let found else {
+            throw ValidationError("No xcstringslint config file could be found")
+        }
+
+        return found
+    }
+}
+
+extension FileManager {
+    func isDirectory(atPath path: String) -> Bool {
+        var fileIsDirectory: ObjCBool = false
+        let exists = FileManager.default.fileExists(atPath: path, isDirectory: &fileIsDirectory)
+        return exists && fileIsDirectory.boolValue
+    }
+}
+
+private let configRegex = try! Regex("\\.?xcstringslint\\.ya?ml")
