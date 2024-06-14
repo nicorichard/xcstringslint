@@ -8,12 +8,13 @@ Ensure your string catalog changes are always up-to-snuff with your team's local
 
 ### CLI
 
-Using a [config file](.xcstringslint.yaml)
+With a [config file](.xcstringslint.yaml) located in the same directory as the executable
 
 ```bash
-swift run xcstringslint --config .xcstringslint.yaml \
-    Sources/StringCatalogValidator/Resources/Localizable.xcstrings
+swift run xcstringslint Sources/StringCatalogValidator/Resources/Localizable.xcstrings
 ```
+
+To specify a config file append `--config [config file path]`
 
 ### GitHub Actions
 
