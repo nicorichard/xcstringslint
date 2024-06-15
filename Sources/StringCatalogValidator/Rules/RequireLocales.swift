@@ -3,6 +3,7 @@ extension Rules {
         let locales: [String]
         public var severity: Severity = .error
         public static let name = "require-locale"
+        public static let description: String = "Requires that each key contains localizations for the provided locale values." 
 
         public init(in locales: [String]) {
             self.locales = locales

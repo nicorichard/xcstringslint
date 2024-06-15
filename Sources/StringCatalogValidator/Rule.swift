@@ -6,6 +6,7 @@ public protocol Rule {
     typealias Failure = Validator.Reason
 
     static var name: String { get }
+    static var description: String { get }
 
     var severity: Severity { get set }
     func validate(key: String, value: Entry) -> [Failure]

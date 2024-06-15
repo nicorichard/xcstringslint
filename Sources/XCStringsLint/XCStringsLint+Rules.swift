@@ -17,7 +17,7 @@ extension XCStringsLint {
                 let padding = alignment - $0.name.count
 
                 let namePad = String(repeating: " ", count: padding)
-                print($0.name + namePad + "Description") // TODO: Describe the rules
+                print($0.name + namePad + $0.description)
 
                 let configPad = String(repeating: " ", count: alignment)
                 print("\(configPad)`value`, `values`")

@@ -6,6 +6,7 @@ extension Rules {
         let states: [String]
         public var severity: Severity = .error
         public static let name = "require-localization-state"
+        public static let description: String = "Requires that each localization's state matches one of the provided values. Know localization states: " + LocalizationState.allCases.map({"`\($0)`"}).joined(separator: ", ")
 
         public init(in states: [String]) {
             self.states = states
@@ -55,6 +56,7 @@ extension Rules {
         let states: [String]
         public var severity: Severity = .error
         public static let name = "reject-localization-state"
+        public static let description: String = "Rejects a localization if it's state matches one of the provided values. Know localization states: " + LocalizationState.allCases.map({"`\($0)`"}).joined(separator: ", ")
 
         public init(in states: [String]) {
             self.states = states
