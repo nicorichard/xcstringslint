@@ -2,10 +2,12 @@ import Foundation
 import StringCatalogDecodable
 
 public protocol Rule {
-    static var name: String { get }
-    var severity: Severity { get }
     typealias Entry = StringCatalog.Entry
     typealias Failure = Validator.Reason
+
+    static var name: String { get }
+
+    var severity: Severity { get set }
     func validate(key: String, value: Entry) -> [Failure]
 }
 

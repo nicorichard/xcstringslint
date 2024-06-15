@@ -3,40 +3,44 @@ import StringCatalogValidator
 import StringCatalogDecodable
 import ArgumentParser
 
-@main
-struct Command: ParsableCommand {
+extension XCStringsLint {
+    struct Lint: ParsableCommand {
+        static var configuration = CommandConfiguration(
+            commandName: "lint"
+        )
 
-    @Argument(help: "Path(s) to .xcstrings String Catalogs")
-    private var paths: [String]
+        @Argument(help: "Path(s) to .xcstrings String Catalogs")
+        private var paths: [String]
 
-    @Option(name: .customLong("config"))
-    private var configPath: String?
+        @Option(name: .customLong("config"))
+        private var configPath: String?
 
-    @Option
-    private var reporter: ReporterFactory = .xcode
+        @Option
+        private var reporter: ReporterFactory = .xcode
 
-    mutating func run() throws {
-        for path in paths {
-            try run(path: path)
+        mutating func run() throws {
+            for path in paths {
+                try run(path: path)
+            }
         }
-    }
 
-    func run(path: String) throws {
-        let catalog = try StringCatalog.load(from: path)
-        let config = try Config.load(from: resolveConfigFilePath())
-        let rules = try config.toDomain()
+        func run(path: String) throws {
+            let catalog = try StringCatalog.load(from: path)
+            let config = try Config.load(from: resolveConfigFilePath())
+            let rules = try config.toDomain()
 
-        let results = Validator(rules: rules, ignores: Ignore.default)
-            .validate(catalog: catalog)
+            let results = Validator(rules: rules, ignores: Ignore.default)
+                .validate(catalog: catalog)
 
-        try reporter.build(path: path)
-            .report(results: results)
+            try reporter.build(path: path)
+                .report(results: results)
+        }
     }
 }
 
 // MARK: - Config Resolving
 
-extension Command {
+extension XCStringsLint.Lint {
     private func findConfig(atPath path: String) throws -> String? {
         try FileManager.default
             .contentsOfDirectory(atPath: path)
