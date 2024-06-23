@@ -9,6 +9,7 @@ extension XCStringsLint {
             commandName: "lint"
         )
 
+        // TODO: Add support for automatic discovery of .xcstrings files if no path is provided
         @Argument(help: "Path(s) to .xcstrings String Catalogs")
         private var paths: [String]
 

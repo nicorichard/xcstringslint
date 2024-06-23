@@ -65,6 +65,56 @@
         }
       }
     },
+    "Rejects a localization if its state matches one of the provided values. Know localization states: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rejects a localization if its state matches one of the provided values. Know localization states: %@"
+          }
+        }
+      }
+    },
+    "Rejects an entry if its extraction state matchs any of the provided values. Known extractions states:  %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rejects an entry if its extraction state matchs any of the provided values. Known extractions states:  %@"
+          }
+        }
+      }
+    },
+    "Requires that each key contains localizations for the provided locale values." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Requires that each key contains localizations for the provided locale values."
+          }
+        }
+      }
+    },
+    "Requires that each key's extraction state matches one of the provided values. Known extractions states:  %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Requires that each key's extraction state matches one of the provided values. Known extractions states:  %@"
+          }
+        }
+      }
+    },
+    "Requires that each localization's state matches one of the provided values. Know localization states: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Requires that each localization's state matches one of the provided values. Know localization states: %@"
+          }
+        }
+      }
+    },
     "should not have extraction state `%@`" : {
       "localizations" : {
         "en" : {

@@ -7,7 +7,7 @@ extension Rules {
         public var severity: Severity = .error
 
         public static let name = "require-extraction-state"
-        public static let description: String = "Requires that each key's extraction state matches one of the provided values. Known extractions states:  \(ExtractionState.allCases.map({"`\($0)`"}).joined(separator: ", "))"
+        public static let description: String = String(localized: "Requires that each key's extraction state matches one of the provided values. Known extractions states:  \(ExtractionState.allCases.map({"`\($0)`"}).joined(separator: ", "))")
 
         public init(in states: [String]) {
             self.states = states
@@ -40,7 +40,7 @@ extension Rules {
         let states: [String]
         public var severity: Severity = .error
         public static let name = "reject-extraction-state"
-        public static let description: String = "Rejects an entry if it's extraction state matchs any of the provided values. Known extractions states:  \(ExtractionState.allCases.map({"`\($0)`"}).joined(separator: ", "))"
+        public static let description: String = String(localized: "Rejects an entry if its extraction state matchs any of the provided values. Known extractions states:  \(ExtractionState.allCases.map({"`\($0)`"}).joined(separator: ", "))")
 
         public init(state: String?) {
             self.states = [state ?? Self.defaultExtractionState]
