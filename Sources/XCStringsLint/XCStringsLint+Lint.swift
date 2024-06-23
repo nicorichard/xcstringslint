@@ -9,9 +9,8 @@ extension XCStringsLint {
             commandName: "lint"
         )
 
-        // TODO: Add support for automatic discovery of .xcstrings files if no path is provided
         @Argument(help: "Path(s) to .xcstrings String Catalogs")
-        private var paths: [String]
+        private var paths: [String] = []
 
         @Option(name: .customLong("config"))
         private var configPath: String?
@@ -20,6 +19,10 @@ extension XCStringsLint {
         private var reporter: ReporterFactory = .xcode
 
         mutating func run() throws {
+            if paths.isEmpty {
+                paths = try findXCStringsFiles(atPath: FileManager.default.currentDirectoryPath)
+            }
+
             for path in paths {
                 try run(path: path)
             }
@@ -42,6 +45,26 @@ extension XCStringsLint {
 // MARK: - Config Resolving
 
 extension XCStringsLint.Lint {
+
+    private func findXCStringsFiles(atPath path: String) throws -> [String] {
+        let enumerator = FileManager.default
+            .enumerator(
+                at: URL(fileURLWithPath: path),
+                includingPropertiesForKeys: [],
+                options: [.skipsHiddenFiles]
+            )
+
+        var files: [String] = []
+        while let file = enumerator?.nextObject() as? URL {
+            let relativePath = file.relativePath
+            if relativePath.hasSuffix(".xcstrings") {
+                files.append(relativePath)
+            }
+        }
+
+        return files
+    }
+
     private func findConfig(atPath path: String) throws -> String? {
         try FileManager.default
             .contentsOfDirectory(atPath: path)
