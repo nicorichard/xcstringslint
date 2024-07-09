@@ -19,7 +19,7 @@ struct XcodeReporter: Reporter {
         for result in results {
             let message = "xcstringslint failed for key `\(result.key)`: " + result.validations.map { validation in
                 "\(validation.message) (\(validation.name))"
-            }.joined(separator: ",")
+            }.joined(separator: "; ")
 
             if result.validations.map(\.severity).contains(.error) {
                 print(level: .error, message)
