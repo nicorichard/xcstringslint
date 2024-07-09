@@ -43,7 +43,7 @@ class RejectExtractionStateTests: XCTestCase {
         let json = "{}"
 
         let result = sut.validate(key: "key", value: try EntryDecoder.entry(from: json))
-        XCTAssertEqual(result.map(\.rule), ["reject-extraction-state"])
+        XCTAssertEqual(result.map(\.name), ["reject-extraction-state"])
     }
 
 
@@ -57,6 +57,6 @@ class RejectExtractionStateTests: XCTestCase {
         """
 
         let result = sut.validate(key: "key", value: try EntryDecoder.entry(from: json))
-        XCTAssertEqual(result.map(\.rule), ["reject-extraction-state"])
+        XCTAssertEqual(result.map(\.name), ["reject-extraction-state"])
     }
 }

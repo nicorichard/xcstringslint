@@ -3,7 +3,7 @@ import StringCatalogValidator
 import StringCatalogDecodable
 import ArgumentParser
 
-extension XCStringsLint {
+extension xcstringslint {
     struct Lint: ParsableCommand {
         static var configuration = CommandConfiguration(
             commandName: "lint"
@@ -44,7 +44,7 @@ extension XCStringsLint {
 
 // MARK: - Config Resolving
 
-extension XCStringsLint.Lint {
+extension xcstringslint.Lint {
 
     private func findXCStringsFiles(atPath path: String) throws -> [String] {
         let enumerator = FileManager.default

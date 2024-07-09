@@ -50,8 +50,10 @@ extension Validator {
         public let validations: [Reason]
     }
 
-    public struct Reason {
-        public let rule: Rule
+    public struct Reason: Equatable {
+        public let name: String
+        public let description: String
+        public let severity: Severity
         public let message: String
     }
 }

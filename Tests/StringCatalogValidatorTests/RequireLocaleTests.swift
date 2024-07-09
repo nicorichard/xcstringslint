@@ -39,7 +39,7 @@ class RequireLocaleTests: XCTestCase {
         """
 
         let result = sut.validate(key: "key", value: try EntryDecoder.entry(from: json))
-        XCTAssertEqual(result.map(\.rule), ["require-locale"])
+        XCTAssertEqual(result.map(\.name), ["require-locale"])
     }
 
     func testRequireLocale_givenNoVariations_multipleLocales_andFullMatch_succeeds() throws {
@@ -91,7 +91,7 @@ class RequireLocaleTests: XCTestCase {
         """
 
         let result = sut.validate(key: "key", value: try EntryDecoder.entry(from: json))
-        XCTAssertEqual(result.map(\.rule), ["require-locale"])
+        XCTAssertEqual(result.map(\.name), ["require-locale"])
     }
 
     func testRequireLocale_givenVariations_andMatchingLocale_succeeds() throws {
@@ -155,6 +155,6 @@ class RequireLocaleTests: XCTestCase {
         """
 
         let result = sut.validate(key: "key", value: try EntryDecoder.entry(from: json))
-        XCTAssertEqual(result.map(\.rule), ["require-locale"])
+        XCTAssertEqual(result.map(\.name), ["require-locale"])
     }
 }

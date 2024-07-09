@@ -63,7 +63,8 @@
             "value" : "no translation state found"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "Rejects a localization if its state matches one of the provided values. Know localization states: %@" : {
       "localizations" : {

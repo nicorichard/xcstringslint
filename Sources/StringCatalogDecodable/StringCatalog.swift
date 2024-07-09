@@ -9,6 +9,14 @@ public struct StringCatalog: Decodable {
         public var localizations: [String: Localization]?
         public var comment: String?
         public var extractionState: String?
+        public var shouldTranslate: Bool?
+
+        public init(localizations: [String : Localization]? = nil, comment: String? = nil, extractionState: String? = nil, shouldTranslate: Bool? = nil) {
+            self.localizations = localizations
+            self.comment = comment
+            self.extractionState = extractionState
+            self.shouldTranslate = shouldTranslate
+        }
     }
 }
 
@@ -40,6 +48,11 @@ public enum Localization: Decodable {
     public struct StringUnit: Decodable {
         public var state: String
         public var value: String
+
+        public init(state: String, value: String) {
+            self.state = state
+            self.value = value
+        }
     }
 }
 

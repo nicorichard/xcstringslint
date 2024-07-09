@@ -1,6 +1,6 @@
 import ArgumentParser
 
-extension XCStringsLint {
+extension xcstringslint {
     struct Rules: ParsableCommand {
         static var configuration = CommandConfiguration(commandName: "rules")
 

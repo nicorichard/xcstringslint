@@ -14,13 +14,16 @@ public protocol Rule {
 
 extension Rule {
     func fail(message: String) -> [Failure] {
-        [
-            Validator.Reason(rule: self, message: message)
-        ]
+        [fail(message: message)]
     }
 
     func fail(message: String) -> Failure {
-        Validator.Reason(rule: self, message: message)
+        Validator.Reason(
+            name: Self.name,
+            description: Self.description,
+            severity: severity,
+            message: message
+        )
     }
 
     var success: [Failure] {

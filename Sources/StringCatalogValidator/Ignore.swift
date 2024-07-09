@@ -18,8 +18,21 @@ public struct Ignore: IgnoreProtocol {
 
 extension Ignore {
     public static let `default` = Ignore { _, rule, value in
-        value.comment?.contains("[no-lint]")
-            ?? value.comment?.contains("[no-lint:\(rule)]")
-            ?? false
+        if let comment = value.comment {
+            if comment.contains("[no-lint]") {
+                return true
+            }
+            if comment.contains("[no-lint:\(rule)]") {
+                return true
+            }
+        }
+
+        if let shouldTranslate = value.shouldTranslate {
+            if shouldTranslate == false {
+                return true
+            }
+        }
+
+        return false
     }
 }

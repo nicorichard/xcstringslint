@@ -48,7 +48,7 @@ class RequireLocalizationStateTests: XCTestCase {
         """
 
         let result = sut.validate(key: "key", value: try EntryDecoder.entry(from: json))
-        XCTAssertEqual(result.map(\.rule), ["require-localization-state"])
+        XCTAssertEqual(result.map(\.name), ["require-localization-state"])
     }
 
     func test_RequireLocalizationState_withVariations_andMatchingState_succeeds() throws {
@@ -112,6 +112,6 @@ class RequireLocalizationStateTests: XCTestCase {
         """
 
         let result = sut.validate(key: "key", value: try EntryDecoder.entry(from: json))
-        XCTAssertEqual(result.map(\.rule), ["require-localization-state"])
+        XCTAssertEqual(result.map(\.name), ["require-localization-state"])
     }
 }

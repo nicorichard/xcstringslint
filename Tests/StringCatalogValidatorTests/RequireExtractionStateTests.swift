@@ -36,7 +36,7 @@ class RequireExtractionStateTests: XCTestCase {
         """
 
         let result = sut.validate(key: "key", value: try EntryDecoder.entry(from: json))
-        XCTAssertEqual(result.map(\.rule), ["require-extraction-state"])
+        XCTAssertEqual(result.map(\.name), ["require-extraction-state"])
     }
 
     func testRequireExtractionStateMatchesValue_failsForOther() throws {
@@ -49,7 +49,7 @@ class RequireExtractionStateTests: XCTestCase {
         """
 
         let result = sut.validate(key: "key", value: try EntryDecoder.entry(from: json))
-        XCTAssertEqual(result.map(\.rule), ["require-extraction-state"])
+        XCTAssertEqual(result.map(\.name), ["require-extraction-state"])
     }
 
     func testRequireExtractionStateMatchesAutomatic_fail() throws {
@@ -62,6 +62,6 @@ class RequireExtractionStateTests: XCTestCase {
         """
 
         let result = sut.validate(key: "key", value: try EntryDecoder.entry(from: json))
-        XCTAssertEqual(result.map(\.rule), ["require-extraction-state"])
+        XCTAssertEqual(result.map(\.name), ["require-extraction-state"])
     }
 }
