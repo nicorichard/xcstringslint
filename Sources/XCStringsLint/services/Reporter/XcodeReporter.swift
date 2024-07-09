@@ -18,10 +18,10 @@ struct XcodeReporter: Reporter {
     func report(results: [Validator.Validation]) throws {
         for result in results {
             let message = "xcstringslint failed for key `\(result.key)`: " + result.validations.map { validation in
-                "\(validation.message) (\(type(of: validation.rule).name))"
+                "\(validation.message) (\(validation.name))"
             }.joined(separator: ",")
 
-            if result.validations.map(\.rule.severity).contains(.error) {
+            if result.validations.map(\.severity).contains(.error) {
                 print(level: .error, message)
             } else {
                 print(level: .warning, message)
@@ -32,7 +32,7 @@ struct XcodeReporter: Reporter {
             result.validations
         }
 
-        let errors = validations.filter { $0.rule.severity == .error }
+        let errors = validations.filter { $0.severity == .error }
 
         if !errors.isEmpty {
             print(level: .error, "Found \(validations.count) total xcstringlint issues in \(results.count) keys, \(errors.count) serious")

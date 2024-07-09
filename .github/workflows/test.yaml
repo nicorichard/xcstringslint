@@ -1,0 +1,12 @@
+name: Unit Test
+on:
+  push:
+
+jobs:
+  test:
+    name: Unit Test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: unit test package
+        run: swift test
