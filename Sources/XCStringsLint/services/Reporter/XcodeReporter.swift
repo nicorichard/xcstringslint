@@ -17,29 +17,28 @@ struct XcodeReporter: Reporter {
 
     func report(results: [Validator.Validation]) throws {
         for result in results {
-            let message = "xcstringslint failed for key `\(result.key)`: " + result.validations.map { validation in
-                "\(validation.message) (\(validation.name))"
-            }.joined(separator: "; ")
-
-            if result.validations.map(\.severity).contains(.error) {
-                print(level: .error, message)
-            } else {
-                print(level: .warning, message)
+            for validation in result.validations {
+                let message = "`\(result.key)`: \(validation.message) (\(validation.name))"
+                switch validation.severity {
+                    case .error:
+                        print(level: .error, message)
+                    case .warning:
+                        print(level: .warning, message)
+                }
             }
         }
 
-        let validations = results.flatMap { result in
-            result.validations
-        }
-
-        let errors = validations.filter { $0.severity == .error }
-
-        if !errors.isEmpty {
-            print(level: .error, "Found \(validations.count) total xcstringlint issues in \(results.count) keys, \(errors.count) serious")
+        if results.errorCount > 0 {
             throw ExitCode.failure
-        } else if !results.isEmpty {
-            print(level: .warning, "Found \(validations.count) total xcstringlint issues in \(results.count) keys")
         }
+    }
+}
+
+extension [Validator.Validation] {
+    fileprivate var errorCount: Int {
+        flatMap(\.validations)
+            .filter { $0.severity == .error }
+            .count
     }
 }
 

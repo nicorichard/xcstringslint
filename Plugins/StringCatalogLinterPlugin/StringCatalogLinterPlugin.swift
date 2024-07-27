@@ -76,7 +76,7 @@ struct StringCatalogLinterPlugin: BuildToolPlugin {
 
         let arguments: [CustomStringConvertible] = [
             "--config", config,
-            "--reporter", "xcode"
+            "--reporter", "xcode",
         ] + catalogs.map(\.path)
 
         return [
@@ -115,7 +115,8 @@ extension StringCatalogLinterPlugin: XcodeBuildToolPlugin {
         }
 
         let arguments: [CustomStringConvertible] = [
-            "--config", config
+            "--config", config,
+            "--reporter", "xcode",
         ] + catalogs.map(\.path)
 
         return [

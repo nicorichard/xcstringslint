@@ -24,7 +24,6 @@ struct CommandLineReporter: Reporter {
 
         let validations = results.flatMap(\.validations)
         let errorCount = validations.filter { $0.severity == .error }.count
-
         let message = String(
             AttributedString(
                 localized: "Found ^[\(validations.count) total issue](inflect: true) in ^[\(results.count) key](inflect: true)"
