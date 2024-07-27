@@ -39,9 +39,9 @@ extension Rules {
                 value.stringUnits.compactMap {
                     if !states.contains($0.state) {
                         if states.count == 1 {
-                            return String(localized: "found state `\($0.state)`, expected one of \(states.joined(separator: ", "))", bundle: .module)
+                            return String(localized: "found state `\($0.state)`, expected `\(states[0])`", bundle: .module)
                         } else {
-                            return String(localized: "found state `\($0.state)`, expected \(states[0])", bundle: .module)
+                            return String(localized: "found state `\($0.state)`, expected one of: \(states.map { "`\($0)`" }.joined(separator: ", "))", bundle: .module)
                         }
                     }
                     return nil

@@ -1,5 +1,6 @@
 import StringCatalogValidator
 import ArgumentParser
+import Foundation
 
 struct CommandLineReporter: Reporter {
     private let print: Printer
@@ -15,28 +16,37 @@ struct CommandLineReporter: Reporter {
 
     func report(results: [Validator.Validation]) throws {
         for result in results {
-            let message = "xcstringslint failed for key `\(result.key)`: " + result.validations.map { validation in
-                "\(validation.message) (\(validation.name))"
-            }.joined(separator: "; ")
-
-            if result.validations.map(\.severity).contains(.error) {
-                print(message)
-            } else {
-                print(message)
+            print("`\(result.key)`:")
+            for validation in result.validations {
+                print("  \(validation.severity.symbol) \(validation.name): \(validation.message)")
             }
         }
 
-        let validations = results.flatMap { result in
-            result.validations
-        }
+        let validations = results.flatMap(\.validations)
+        let errorCount = validations.filter { $0.severity == .error }.count
 
-        let errors = validations.filter { $0.severity == .error }
+        let message = String(
+            AttributedString(
+                localized: "Found ^[\(validations.count) total issue](inflect: true) in ^[\(results.count) key](inflect: true)"
+            ).characters
+        )
 
-        if !errors.isEmpty {
-            print("Found \(results.count) total xcstringlint issues in \(results.count) keys, \(errors.count) serious")
+        if errorCount > 0 {
+            print(message + ", \(errorCount) serious")
             throw ExitCode.failure
         } else if !results.isEmpty {
-            print("Found \(results.count) total xcstringlint issues in \(results.count) keys")
+            print(message)
+        }
+    }
+}
+
+extension Severity {
+    fileprivate var symbol: String {
+        switch self {
+        case .error:
+            return "❌"
+        case .warning:
+            return "⚠️"
         }
     }
 }
