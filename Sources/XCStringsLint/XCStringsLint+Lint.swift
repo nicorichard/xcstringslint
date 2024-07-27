@@ -16,7 +16,7 @@ extension xcstringslint {
         private var configPath: String?
 
         @Option
-        private var reporter: ReporterFactory = .xcode
+        private var reporter: ReporterFactory = .cli
 
         mutating func run() throws {
             if paths.isEmpty {
