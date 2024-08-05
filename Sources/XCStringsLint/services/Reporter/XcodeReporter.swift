@@ -6,12 +6,15 @@ import ArgumentParser
 struct XcodeReporter: Reporter {
     private let print: Printer
     let path: String
+    let strict: Bool
 
     init(
         path: String,
+        strict: Bool,
         printer: Printer = PrintPrinter()
     ) {
         self.path = path
+        self.strict = strict
         self.print = printer
     }
 
@@ -28,13 +31,17 @@ struct XcodeReporter: Reporter {
             }
         }
 
-        if results.errorCount > 0 {
+        if (strict && results.validationCount > 0) || results.errorCount > 0 {
             throw ExitCode.failure
         }
     }
 }
 
 extension [Validator.Validation] {
+    fileprivate var validationCount: Int {
+        flatMap(\.validations).count
+    }
+
     fileprivate var errorCount: Int {
         flatMap(\.validations)
             .filter { $0.severity == .error }

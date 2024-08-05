@@ -2,6 +2,7 @@
   "sourceLanguage" : "en",
   "strings" : {
     "found state `%@`, expected %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -11,12 +12,33 @@
         }
       }
     },
+    "found state `%@`, expected `%@`" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "found state `%1$@`, expected `%2$@`"
+          }
+        }
+      }
+    },
     "found state `%@`, expected one of %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "found state `%1$@`, expected one of %2$@"
+          }
+        }
+      }
+    },
+    "found state `%@`, expected one of: %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "found state `%1$@`, expected one of: %2$@"
           }
         }
       }
@@ -76,7 +98,11 @@
         }
       }
     },
+    "Rejects an entry if its extraction state matches any of the provided values. Known extractions states:  %@" : {
+
+    },
     "Rejects an entry if its extraction state matchs any of the provided values. Known extractions states:  %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

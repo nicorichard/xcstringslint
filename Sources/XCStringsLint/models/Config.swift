@@ -33,7 +33,7 @@ struct Config: Decodable {
                 }
                 self.severity = severity
             } else {
-                severity = .error
+                severity = .warning
             }
         }
     }

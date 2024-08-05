@@ -18,6 +18,9 @@ extension xcstringslint {
         @Option
         private var reporter: ReporterFactory = .cli
 
+        @Flag(name: .shortAndLong, help: "Run in strict mode")
+        private var strict: Bool = false
+
         mutating func run() throws {
             if paths.isEmpty {
                 paths = try findXCStringsFiles(atPath: FileManager.default.currentDirectoryPath)
@@ -36,7 +39,7 @@ extension xcstringslint {
             let results = Validator(rules: rules, ignores: Ignore.default)
                 .validate(catalog: catalog)
 
-            try reporter.build(path: path)
+            try reporter.build(path: path, strict: strict)
                 .report(results: results)
         }
     }

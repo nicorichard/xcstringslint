@@ -1,4 +1,7 @@
 extension Rules {
+
+    // MARK: - RequireLocale
+
     public struct RequireLocale: Rule {
         let locales: [String]
         public var severity: Severity = .error
@@ -28,8 +31,14 @@ extension Rules {
     }
 }
 
+// MARK: - Extensions
+
 extension Rules.RequireLocale {
     public init(in locales: String...) {
         self.locales = locales
+    }
+
+    public init(locale: String) {
+        self.locales = [locale]
     }
 }

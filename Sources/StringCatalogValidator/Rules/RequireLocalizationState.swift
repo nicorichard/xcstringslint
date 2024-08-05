@@ -12,21 +12,9 @@ extension Rules {
             self.states = states
         }
 
-        public init(in states: String...) {
-            self.states = states
-        }
-
-        public init(_ state: String) {
-            self.states = [state]
-        }
-
-        static var emptyLocalizationState: String {
-            "empty"
-        }
-
         public func validate(key: String, value: Entry) -> [Failure] {
             guard let localizations = value.localizations else {
-                if states.contains(Self.emptyLocalizationState) {
+                if states.contains(Rules.emptyLocalizationState) {
                     return success
                 }
 
@@ -62,16 +50,13 @@ extension Rules {
             self.states = states
         }
 
-        public init(in states: String...) {
-            self.states = states
-        }
-
-        public init(_ state: String) {
-            self.states = [state]
-        }
-
         public func validate(key: String, value: Entry) -> [Failure] {
-            guard let localizations = value.localizations else { return success }
+            guard let localizations = value.localizations else {
+                if states.contains(Rules.emptyLocalizationState) {
+                    return fail(message: "should not have empty translation state")
+                }
+                return success
+            }
 
             return localizations.flatMap { key, value in
                 value.stringUnits.compactMap {
@@ -82,5 +67,31 @@ extension Rules {
                 }
             }.map(fail)
         }
+    }
+}
+
+extension Rules {
+    fileprivate static var emptyLocalizationState: String {
+        "empty"
+    }
+}
+
+extension Rules.RequireLocalizationState {
+    public init(in states: String...) {
+        self.states = states
+    }
+
+    public init(_ state: String) {
+        self.states = [state]
+    }
+}
+
+extension Rules.RejectLocalizationState {
+    public init(in states: String...) {
+        self.states = states
+    }
+
+    public init(_ state: String) {
+        self.states = [state]
     }
 }
