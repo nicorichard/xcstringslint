@@ -8,7 +8,7 @@ class RejectLocalizationStateTests: XCTestCase {
         let json = "{}"
 
         let result = sut.validate(key: "key", value: try EntryDecoder.entry(from: json))
-        XCTAssertEqual(result, [])
+        XCTAssertEqual(result.map(\.name), ["reject-localization-state"])
     }
 
     func test_RequireLocalizationState_withNoVariations_andMatchingState_succeeds() throws {
