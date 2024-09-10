@@ -73,20 +73,21 @@ To ignore a specific rule, include `[no-lint:rule-name]` in the key's comment, e
 ## Example Output
 
 ```
-$ swift run xcstringslint Sources/StringCatalogValidator/Resources/Localizable.xcstrings --require-locale en fr
+$ swift run xcstringslint Sources/StringCatalogValidator/Resources/Localizable.xcstrings
 
-Validation failed for key: `found state `%@`, expected %@`
-  - missing translation for 1 locale: fr
-Validation failed for key: `found state `%@`, expected one of %@`
-  - missing translation for 1 locale: fr
-Validation failed for key: `missing translation for %lld locale: %@`
-  - missing translation for 1 locale: fr
-Validation failed for key: `should not have extraction state `%@``
-  - missing translation for 1 locale: fr
-Validation failed for key: `should not have state %@`
-  - missing translation for 1 locale: fr
-Validation failed for key: `should not have state `%@``
-  - missing translation for 1 locale: fr
+`Rejects an entry if its extraction state matches any of the provided values. Known extractions states:  %@`:
+  ⚠️ require-localization-state: no translation state found
+  ⚠️ require-locale: missing translation for 1 locale: en
+`Rejects an entry if its extraction state matchs any of the provided values. Known extractions states:  %@`:
+  ⚠️ require-extraction-state: should not have extraction state `stale`
+`found state `%@`, expected %@`:
+  ⚠️ require-extraction-state: should not have extraction state `stale`
+`found state `%@`, expected `%@``:
+  ⚠️ require-localization-state: found state `new`, expected `translated`
+`found state `%@`, expected one of %@`:
+  ⚠️ require-extraction-state: should not have extraction state `stale`
+`found state `%@`, expected one of: %@`:
+  ⚠️ require-localization-state: found state `new`, expected `translated`
 
-[Error]: Found 6 validation issues in catalog: Sources/StringCatalogValidator/Resources/Localizable.xcstrings
+[Warning]: Found 7 total issues in 6 keys
 ```
