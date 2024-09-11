@@ -1,0 +1,24 @@
+on:
+  release:
+    types: [published]
+name: Build and upload xcstringslint release binary
+jobs:
+  build-macos:
+    name: Build macOS Executable
+    runs-on: macos-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build macOS binary
+        id: build
+        run: |
+          swift build -c release --arch x86_64 --arch arm64
+          echo "path='$(swift build -c release --arch x86_64 --arch arm64 --show-bin-path)'" >> "$GITHUB_OUTPUT"
+
+      - name: 'Upload macOS Build Artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcstringslint
+          path: ${{ steps.build.outputs.path }}
