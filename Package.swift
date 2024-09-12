@@ -13,10 +13,6 @@ let package = Package(
         .executable(
             name: "xcstringslint",
             targets: ["XCStringsLint"]
-        ),
-        .plugin(
-            name: "XCStringsLintBuildToolPlugin",
-            targets: ["XCStringsLintBuildToolPlugin"]
         )
     ],
     dependencies: [
@@ -29,11 +25,6 @@ let package = Package(
             dependencies: ["StringCatalogDecodable"],
             resources: [
                 .process("Resources")
-            ],
-            plugins: [
-                // !!!: We cannot meta-plugin from the same package.
-                // If we wanted to do this we could first compile the plugin to a binary.
-                //.plugin(name: "StringCatalogLinterPlugin")
             ]
         ),
         .testTarget(
@@ -50,11 +41,6 @@ let package = Package(
                 "Yams",
                 "StringCatalogValidator",
             ]
-        ),
-        .plugin(
-            name: "XCStringsLintBuildToolPlugin",
-            capability: .buildTool(),
-            dependencies: ["XCStringsLint"]
         )
     ]
 )
