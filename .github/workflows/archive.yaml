@@ -15,7 +15,9 @@ jobs:
         id: build
         run: |
           swift build -c release --arch x86_64 --arch arm64
-          echo "path='$(swift build -c release --arch x86_64 --arch arm64 --show-bin-path)'" >> "$GITHUB_OUTPUT"
+          mkdir -p builds
+          mv $(swift build -c release --arch x86_64 --arch arm64 --show-bin-path) builds/xcstringslint
+          echo "path=builds/xcstringslint" >> "$GITHUB_OUTPUT"
 
       - name: 'Upload macOS Build Artifact'
         uses: actions/upload-artifact@v4
