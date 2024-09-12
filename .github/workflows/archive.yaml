@@ -1,0 +1,26 @@
+on:
+  release:
+    types: [published]
+permissions:
+  contents: write    
+name: Build and upload xcstringslint release binary
+jobs:
+  build-macos:
+    name: Build macOS Executable
+    runs-on: macos-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build macOS binary
+        id: build
+        run: |
+          swift build -c release --arch x86_64 --arch arm64
+          mv $(swift build -c release --arch x86_64 --arch arm64 --show-bin-path) artifact
+          echo "path=artifact/xcstringslint" >> "$GITHUB_OUTPUT"
+
+      - name: Upload binary to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.build.outputs.path }}

@@ -42,10 +42,10 @@ struct CommandLineReporter: Reporter {
         )
 
         if errorCount > 0 {
-            print(message + ", \(errorCount) serious")
+            print("\n[Error]: " + message + ", \(errorCount) serious")
             throw ExitCode.failure
         } else if !results.isEmpty {
-            print(message)
+            print("\n[Warning]: " + message)
         }
     }
 }

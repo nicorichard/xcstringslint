@@ -15,13 +15,13 @@ let package = Package(
             targets: ["XCStringsLint"]
         ),
         .plugin(
-            name: "StringCatalogLinterPlugin",
-            targets: ["StringCatalogLinterPlugin"]
+            name: "XCStringsLintBuildToolPlugin",
+            targets: ["XCStringsLintBuildToolPlugin"]
         )
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0"),
-        .package(url: "https://github.com/jpsim/Yams", from: "5.1.2")
+        .package(url: "https://github.com/jpsim/Yams", from: "5.1.0")
     ],
     targets: [
         .target(
@@ -31,7 +31,8 @@ let package = Package(
                 .process("Resources")
             ],
             plugins: [
-                // TODO: Unfortunately we cannot use this library to meta-lint this library directly. However, once we compile the library to an executable we might be able to
+                // !!!: We cannot meta-plugin from the same package.
+                // If we wanted to do this we could first compile the plugin to a binary.
                 //.plugin(name: "StringCatalogLinterPlugin")
             ]
         ),
@@ -51,7 +52,7 @@ let package = Package(
             ]
         ),
         .plugin(
-            name: "StringCatalogLinterPlugin",
+            name: "XCStringsLintBuildToolPlugin",
             capability: .buildTool(),
             dependencies: ["XCStringsLint"]
         )
