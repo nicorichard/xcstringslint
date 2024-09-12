@@ -17,9 +17,8 @@ jobs:
         id: build
         run: |
           swift build -c release --arch x86_64 --arch arm64
-          mkdir -p builds
-          mv $(swift build -c release --arch x86_64 --arch arm64 --show-bin-path) builds/xcstringslint
-          echo "path=builds/xcstringslint" >> "$GITHUB_OUTPUT"
+          mv $(swift build -c release --arch x86_64 --arch arm64 --show-bin-path) artifact
+          echo "path=artifact/xcstringslint" >> "$GITHUB_OUTPUT"
 
       - name: Upload binary to release
         uses: softprops/action-gh-release@v2
