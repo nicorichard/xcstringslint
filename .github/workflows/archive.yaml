@@ -1,6 +1,8 @@
 on:
   release:
     types: [published]
+permissions:
+  contents: write    
 name: Build and upload xcstringslint release binary
 jobs:
   build-macos:
