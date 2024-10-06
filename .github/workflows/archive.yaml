@@ -25,11 +25,11 @@ jobs:
           ARTIFACT_FOLDER_NAME: "XCStringsLint.artifactbundle/xcstringslint-${{ github.ref_name }}-macos"
           VERSION: ${{ github.ref_name }}
         run: |
-          mkdir -p "$(ARTIFACT_FOLDER_NAME)/bin"
+          mkdir -p "$ARTIFACT_FOLDER_NAME/bin"
 
-          sed 's/__VERSION__/$(VERSION)/g' .github/artifactbundle.json.template > "$(ARTIFACT_FOLDER_NAME)/info.json"
-          cp -f "${{ steps.build.outputs.path }}" "$(ARTIFACT_FOLDER_NAME)/bin"
-          cp -f "LICENSE" "$(ARTIFACT_FOLDER_NAME)"
+          sed 's/__VERSION__/$VERSION/g' .github/artifactbundle.json.template > "$ARTIFACT_FOLDER_NAME/info.json"
+          cp -f "${{ steps.build.outputs.path }}" "$ARTIFACT_FOLDER_NAME/bin"
+          cp -f "LICENSE" "$ARTIFACT_FOLDER_NAME"
 
           (zip -yr - "XCStringsLint.artifactbundle") > "./XCStringsLint-macos.artifactbundle.zip"
 
