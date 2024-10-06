@@ -13,27 +13,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Build macOS binary
-        id: build
-        run: |
-          swift build -c release --arch x86_64 --arch arm64
-          mv $(swift build -c release --arch x86_64 --arch arm64 --show-bin-path) artifact
-          echo "path=artifact/xcstringslint" >> "$GITHUB_OUTPUT"
-
       - name: Build artifact bundle
         env:
           ARTIFACT_FOLDER_NAME: "XCStringsLint.artifactbundle"
           VERSION: ${{ github.ref_name }}
         run: |
+          swift build -c release --arch x86_64 --arch arm64
+          BINARY_PATH=$(swift build -c release --arch x86_64 --arch arm64 --show-bin-path)
+
           mkdir -p "$ARTIFACT_FOLDER_NAME/xcstringslint-$VERSION-macos/bin"
-          cp -f "${{ steps.build.outputs.path }}" "$ARTIFACT_FOLDER_NAME/xcstringslint-$VERSION-macos/bin"
+
+          cp -f "$BINARY_PATH/xcstringslint" "$ARTIFACT_FOLDER_NAME/xcstringslint-$VERSION-macos/bin"
+          cp -r -- $BINARY_PATH/*.bundle "$ARTIFACT_FOLDER_NAME/xcstringslint-$VERSION-macos/bin"
 
           sed "s/__VERSION__/$VERSION/g" .github/artifactbundle.json.template > "$ARTIFACT_FOLDER_NAME/info.json"
           cp -f "LICENSE" "$ARTIFACT_FOLDER_NAME"
 
-          (zip -yr - "$ARTIFACT_FOLDER_NAME") > "./XCStringsLint-macos.artifactbundle.zip"
+          (zip -yr - "$ARTIFACT_FOLDER_NAME") > "./$ARTIFACT_FOLDER_NAME.zip"
 
       - name: Upload binary to release
         uses: softprops/action-gh-release@v2
         with:
-          files: XCStringsLint-macos.artifactbundle.zip
+          files: XCStringsLint.artifactbundle.zip
