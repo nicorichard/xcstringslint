@@ -21,6 +21,10 @@ To specify a config file append `--config [config file path]`
 
 See [this repository's actions for an example](.github/workflows/lint.yaml)
 
+#### Plugin
+
+The [XCStringsLintPlugin](https://github.com/nicorichard/XCStringsLintPlugin) repository is maintained separately.
+
 ### Configuration
 
 #### Rules
