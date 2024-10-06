@@ -21,10 +21,10 @@ jobs:
           echo "path=artifact/xcstringslint" >> "$GITHUB_OUTPUT"
 
       - name: Build artifact bundle
+        env:
+          ARTIFACT_FOLDER_NAME: "XCStringsLint.artifactbundle/xcstringslint-${{ github.ref_name }}-macos"
+          VERSION: ${{ github.ref_name }}
         run: |
-          VERSION="${{ github.ref_name }}"
-          ARTIFACT_FOLDER_NAME="XCStringsLint.artifactbundle/xcstringslint-$(VERSION)-macos"
-
           mkdir -p "$(ARTIFACT_FOLDER_NAME)/bin"
 
           sed 's/__VERSION__/$(VERSION)/g' .github/artifactbundle.json.template > "$(ARTIFACT_FOLDER_NAME)/info.json"
