@@ -1,0 +1,15 @@
+{
+    "schemaVersion": "1.0",
+    "artifacts": {
+        "xcstringslint": {
+            "version": "__VERSION__",
+            "type": "executable",
+            "variants": [
+                {
+                    "path": "xcstringslint-__VERSION__-macos/bin/xcstringslint",
+                    "supportedTriples": ["x86_64-apple-macosx", "arm64-apple-macosx"]
+                }
+            ]
+        }
+    }
+}
