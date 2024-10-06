@@ -27,7 +27,7 @@ jobs:
         run: |
           mkdir -p "$ARTIFACT_FOLDER_NAME/bin"
 
-          sed 's/__VERSION__/$VERSION/g' .github/artifactbundle.json.template > "$ARTIFACT_FOLDER_NAME/info.json"
+          sed "s/__VERSION__/$VERSION/g" .github/artifactbundle.json.template > "$ARTIFACT_FOLDER_NAME/info.json"
           cp -f "${{ steps.build.outputs.path }}" "$ARTIFACT_FOLDER_NAME/bin"
           cp -f "LICENSE" "$ARTIFACT_FOLDER_NAME"
 
