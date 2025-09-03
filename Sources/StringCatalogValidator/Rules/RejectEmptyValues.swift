@@ -66,7 +66,7 @@ extension Rules {
             
             for (locale, localization) in localizations {
                 for stringUnit in localization.stringUnits {
-                    if Self.isEmpty(stringUnit.value) {
+                    if stringUnit.value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                         if stringUnit.value.isEmpty {
                             failures.append("empty value in '\(locale)' locale")
                         } else {
@@ -79,65 +79,4 @@ extension Rules {
             return failures.map { fail(message: $0) }
         }
     }
-}
-
-extension Rules.RejectEmptyValues {
-    /// Check if a string value would be considered empty by this rule
-    public static func isEmpty(_ value: String) -> Bool {
-        return value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-    }
-    
-    /// Get detailed analysis of why a string is considered empty
-    public static func analyzeEmptyString(_ value: String) -> EmptyStringAnalysis {
-        if value.isEmpty {
-            return .completelyEmpty
-        }
-        
-        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
-        if trimmed.isEmpty {
-            let whitespaceTypes = analyzeWhitespaceTypes(in: value)
-            return .whitespaceOnly(types: whitespaceTypes)
-        }
-        
-        return .notEmpty
-    }
-    
-    private static func analyzeWhitespaceTypes(in string: String) -> [WhitespaceType] {
-        var types: Set<WhitespaceType> = []
-        
-        for char in string {
-            switch char {
-            case " ":
-                types.insert(.spaces)
-            case "\t":
-                types.insert(.tabs)
-            case "\n":
-                types.insert(.newlines)
-            case "\r":
-                types.insert(.carriageReturns)
-            default:
-                if char.isWhitespace {
-                    types.insert(.otherUnicode)
-                }
-            }
-        }
-        
-        return Array(types).sorted { $0.rawValue < $1.rawValue }
-    }
-}
-
-// MARK: - Supporting Types
-
-public enum EmptyStringAnalysis {
-    case completelyEmpty
-    case whitespaceOnly(types: [WhitespaceType])
-    case notEmpty
-}
-
-public enum WhitespaceType: String, CaseIterable {
-    case spaces = "spaces"
-    case tabs = "tabs" 
-    case newlines = "newlines"
-    case carriageReturns = "carriage_returns"
-    case otherUnicode = "other_unicode"
 }

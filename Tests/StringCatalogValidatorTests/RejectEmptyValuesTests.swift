@@ -117,29 +117,4 @@ class RejectEmptyValuesTests: XCTestCase {
         XCTAssertFalse(Rules.RejectEmptyValues.isEmpty("Hello"))
         XCTAssertFalse(Rules.RejectEmptyValues.isEmpty(" Hello "))
     }
-    
-    func testRejectEmptyValues_analysis() {
-        let analysis1 = Rules.RejectEmptyValues.analyzeEmptyString("")
-        if case .completelyEmpty = analysis1 {
-            // Expected
-        } else {
-            XCTFail("Expected completelyEmpty")
-        }
-        
-        let analysis2 = Rules.RejectEmptyValues.analyzeEmptyString("   \n\t")
-        if case .whitespaceOnly(let types) = analysis2 {
-            XCTAssertTrue(types.contains(.spaces))
-            XCTAssertTrue(types.contains(.newlines))
-            XCTAssertTrue(types.contains(.tabs))
-        } else {
-            XCTFail("Expected whitespaceOnly")
-        }
-        
-        let analysis3 = Rules.RejectEmptyValues.analyzeEmptyString("Hello")
-        if case .notEmpty = analysis3 {
-            // Expected
-        } else {
-            XCTFail("Expected notEmpty")
-        }
-    }
 }

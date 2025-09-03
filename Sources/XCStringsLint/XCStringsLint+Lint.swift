@@ -34,7 +34,7 @@ extension xcstringslint {
         func run(path: String) throws {
             let catalog = try StringCatalog.load(from: path)
             let config = try Config.load(from: resolveConfigFilePath())
-            let rules = try config.toDomain()
+            let rules = config.rules.map { $0.rule }
 
             let results = Validator(rules: rules, ignores: Ignore.default)
                 .validate(catalog: catalog)
