@@ -9,7 +9,9 @@ let registry: [(Rule & ValuesConfigurable).Type] = [
     Rules.RequireComment.self,
     Rules.RequireMatchingPlaceholders.self,
     Rules.RejectEmptyValues.self,
-    Rules.RejectPatterns.self
+    Rules.RejectPatterns.self,
+    Rules.RequirePositionalPlaceholders.self,
+    Rules.RequireObjectPlaceholders.self
 ]
 
 extension Rules.RequireExtractionState: ValuesConfigurable {
@@ -63,5 +65,18 @@ extension Rules.RejectEmptyValues: ValuesConfigurable {
 extension Rules.RejectPatterns: ValuesConfigurable {
     init(values: [String]) {
         self.init(patterns: values)
+    }
+}
+
+extension Rules.RequirePositionalPlaceholders: ValuesConfigurable {
+    init(values: [String]) {
+        let applyToAll = values.contains("all")
+        self.init(applyToAll: applyToAll)
+    }
+}
+
+extension Rules.RequireObjectPlaceholders: ValuesConfigurable {
+    init(values: [String]) {
+        self.init()
     }
 }
