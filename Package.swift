@@ -7,12 +7,23 @@ let package = Package(
     name: "XCStringsLint",
     defaultLocalization: "en",
     platforms: [
-        .macOS(.v13)
+        .macOS(.v13),
+        .iOS(.v16),
+        .tvOS(.v16),
+        .watchOS(.v9)
     ],
     products: [
         .executable(
             name: "xcstringslint",
             targets: ["XCStringsLint"]
+        ),
+        .library(
+            name: "StringCatalogValidator",
+            targets: ["StringCatalogValidator"]
+        ),
+        .library(
+            name: "StringCatalogDecodable", 
+            targets: ["StringCatalogDecodable"]
         )
     ],
     dependencies: [

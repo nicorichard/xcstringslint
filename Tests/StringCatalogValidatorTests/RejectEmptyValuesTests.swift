@@ -1,0 +1,145 @@
+import XCTest
+import StringCatalogValidator
+
+class RejectEmptyValuesTests: XCTestCase {
+    
+    func testRejectEmptyValues_withValidValues_succeeds() throws {
+        let sut = Rules.RejectEmptyValues()
+        
+        let json = """
+        {
+            "localizations": {
+                "en": {
+                    "stringUnit": {
+                        "state": "translated",
+                        "value": "Save Changes"
+                    }
+                }
+            }
+        }
+        """
+        
+        let result = sut.validate(key: "save_button", value: try EntryDecoder.entry(from: json))
+        XCTAssertEqual(result, [])
+    }
+    
+    func testRejectEmptyValues_withEmptyValue_fails() throws {
+        let sut = Rules.RejectEmptyValues()
+        
+        let json = """
+        {
+            "localizations": {
+                "en": {
+                    "stringUnit": {
+                        "state": "translated",
+                        "value": ""
+                    }
+                }
+            }
+        }
+        """
+        
+        let result = sut.validate(key: "save_button", value: try EntryDecoder.entry(from: json))
+        XCTAssertEqual(result.map(\.name), ["reject-empty-values"])
+        XCTAssertTrue(result.first?.message.contains("empty value in 'en'") == true)
+    }
+    
+    func testRejectEmptyValues_withWhitespaceOnlyValue_fails() throws {
+        let sut = Rules.RejectEmptyValues()
+        
+        let json = """
+        {
+            "localizations": {
+                "en": {
+                    "stringUnit": {
+                        "state": "translated",
+                        "value": "   \\n\\t  "
+                    }
+                }
+            }
+        }
+        """
+        
+        let result = sut.validate(key: "save_button", value: try EntryDecoder.entry(from: json))
+        XCTAssertEqual(result.map(\.name), ["reject-empty-values"])
+        XCTAssertTrue(result.first?.message.contains("whitespace-only value in 'en'") == true)
+    }
+    
+    func testRejectEmptyValues_withMultipleLocales_checksAll() throws {
+        let sut = Rules.RejectEmptyValues()
+        
+        let json = """
+        {
+            "localizations": {
+                "en": {
+                    "stringUnit": {
+                        "state": "translated",
+                        "value": "Valid text"
+                    }
+                },
+                "es": {
+                    "stringUnit": {
+                        "state": "translated",
+                        "value": ""
+                    }
+                },
+                "fr": {
+                    "stringUnit": {
+                        "state": "translated",
+                        "value": "   "
+                    }
+                }
+            }
+        }
+        """
+        
+        let result = sut.validate(key: "text", value: try EntryDecoder.entry(from: json))
+        XCTAssertEqual(result.map(\.name), ["reject-empty-values", "reject-empty-values"])
+        
+        let messages = result.map(\.message)
+        XCTAssertTrue(messages.contains { $0.contains("empty value in 'es'") })
+        XCTAssertTrue(messages.contains { $0.contains("whitespace-only value in 'fr'") })
+    }
+    
+    func testRejectEmptyValues_withNoLocalizations_succeeds() throws {
+        let sut = Rules.RejectEmptyValues()
+        
+        let json = "{}"
+        
+        let result = sut.validate(key: "empty", value: try EntryDecoder.entry(from: json))
+        XCTAssertEqual(result, [])
+    }
+    
+    func testRejectEmptyValues_staticChecking() {
+        XCTAssertTrue(Rules.RejectEmptyValues.isEmpty(""))
+        XCTAssertTrue(Rules.RejectEmptyValues.isEmpty("   "))
+        XCTAssertTrue(Rules.RejectEmptyValues.isEmpty("\n\t"))
+        XCTAssertFalse(Rules.RejectEmptyValues.isEmpty("Hello"))
+        XCTAssertFalse(Rules.RejectEmptyValues.isEmpty(" Hello "))
+    }
+    
+    func testRejectEmptyValues_analysis() {
+        let analysis1 = Rules.RejectEmptyValues.analyzeEmptyString("")
+        if case .completelyEmpty = analysis1 {
+            // Expected
+        } else {
+            XCTFail("Expected completelyEmpty")
+        }
+        
+        let analysis2 = Rules.RejectEmptyValues.analyzeEmptyString("   \n\t")
+        if case .whitespaceOnly(let types) = analysis2 {
+            XCTAssertTrue(types.contains(.spaces))
+            XCTAssertTrue(types.contains(.newlines))
+            XCTAssertTrue(types.contains(.tabs))
+        } else {
+            XCTFail("Expected whitespaceOnly")
+        }
+        
+        let analysis3 = Rules.RejectEmptyValues.analyzeEmptyString("Hello")
+        if case .notEmpty = analysis3 {
+            // Expected
+        } else {
+            XCTFail("Expected notEmpty")
+        }
+    }
+}

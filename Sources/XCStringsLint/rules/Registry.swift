@@ -6,6 +6,10 @@ let registry: [(Rule & ValuesConfigurable).Type] = [
     Rules.RequireLocale.self,
     Rules.RequireLocalizationState.self,
     Rules.RejectLocalizationState.self,
+    Rules.RequireComment.self,
+    Rules.RequireMatchingPlaceholders.self,
+    Rules.RejectEmptyValues.self,
+    Rules.RejectPatterns.self
 ]
 
 extension Rules.RequireExtractionState: ValuesConfigurable {
@@ -35,5 +39,29 @@ extension Rules.RequireLocalizationState: ValuesConfigurable {
 extension Rules.RejectLocalizationState: ValuesConfigurable {
     init(values: [String]) {
         self.init(in: values)
+    }
+}
+
+extension Rules.RequireComment: ValuesConfigurable {
+    init(values: [String]) {
+        self.init()
+    }
+}
+
+extension Rules.RequireMatchingPlaceholders: ValuesConfigurable {
+    init(values: [String]) {
+        self.init()
+    }
+}
+
+extension Rules.RejectEmptyValues: ValuesConfigurable {
+    init(values: [String]) {
+        self.init()
+    }
+}
+
+extension Rules.RejectPatterns: ValuesConfigurable {
+    init(values: [String]) {
+        self.init(patterns: values)
     }
 }

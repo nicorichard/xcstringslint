@@ -1,22 +1,22 @@
-struct Config: Decodable {
+public struct Config: Decodable {
     let rules: [String: Rule]
 
-    struct Rule: Decodable {
+    public struct Rule: Decodable {
         let values: [String]
         let severity: Severity
 
-        enum Severity: String, Decodable {
+        public enum Severity: String, CaseIterable, Decodable {
             case warning
             case error
         }
 
-        enum CodingKeys: String, CodingKey {
+        enum CodingKeys: String, CaseIterable, CodingKey {
             case value
             case values
             case severity
         }
 
-        init(from decoder: Decoder) throws {
+        public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             if let value = try? container.decodeIfPresent(String.self, forKey: .value) {
                 values = [value]
@@ -35,6 +35,11 @@ struct Config: Decodable {
             } else {
                 severity = .warning
             }
+        }
+        
+        public init(values: [String], severity: Severity) {
+            self.values = values
+            self.severity = severity
         }
     }
 }

@@ -11,7 +11,12 @@ extension StringCatalog {
             throw ValidationError("Could not find xcstrings catalog at path: \(path)")
         }
 
-        let data = try Data(contentsOf: URL(fileURLWithPath: path))
+        let data: Data
+        do {
+            data = try Data(contentsOf: URL(fileURLWithPath: path))
+        } catch {
+            throw ValidationError("Failed to read xcstrings file at \(path): \(error.localizedDescription)")
+        }
 
         return try load(from: data)
     }
@@ -19,6 +24,10 @@ extension StringCatalog {
     static func load(from data: Data) throws -> StringCatalog {
         let decoder = JSONDecoder()
 
-        return try decoder.decode(StringCatalog.self, from: data)
+        do {
+            return try decoder.decode(StringCatalog.self, from: data)
+        } catch {
+            throw ValidationError("Invalid xcstrings file format: \(error.localizedDescription)")
+        }
     }
 }

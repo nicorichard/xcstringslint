@@ -55,6 +55,23 @@
         }
       }
     },
+    "mismatched interpolation" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mismatched %1$@ interpolation of %2$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "interpolation qui manque %1$@"
+          }
+        }
+      }
+    },
     "missing translation for %lld locale: %@" : {
       "localizations" : {
         "en" : {
@@ -89,6 +106,7 @@
       "shouldTranslate" : false
     },
     "Rejects a localization if its state matches one of the provided values. Know localization states: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -97,9 +115,6 @@
           }
         }
       }
-    },
-    "Rejects an entry if its extraction state matches any of the provided values. Known extractions states:  %@" : {
-
     },
     "Rejects an entry if its extraction state matchs any of the provided values. Known extractions states:  %@" : {
       "extractionState" : "stale",
@@ -113,6 +128,7 @@
       }
     },
     "Requires that each key contains localizations for the provided locale values." : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -123,6 +139,7 @@
       }
     },
     "Requires that each key's extraction state matches one of the provided values. Known extractions states:  %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -133,6 +150,7 @@
       }
     },
     "Requires that each localization's state matches one of the provided values. Know localization states: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

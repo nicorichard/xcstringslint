@@ -10,9 +10,19 @@ extension Config {
             throw ValidationError("No xcstringslint config file could be found at path: \(path)")
         }
 
-        let data = try Data(contentsOf: URL(fileURLWithPath: path))
+        let data: Data
+        do {
+            data = try Data(contentsOf: URL(fileURLWithPath: path))
+        } catch {
+            throw ValidationError("Failed to read config file at \(path): \(error.localizedDescription)")
+        }
 
         let decoder = YAMLDecoder()
-        return try decoder.decode(Config.self, from: data)
+        
+        do {
+            return try decoder.decode(Config.self, from: data)
+        } catch {
+            throw ValidationError("Invalid config file format at \(path): \(error.localizedDescription)")
+        }
     }
 }

@@ -104,4 +104,11 @@ extension FileManager {
     }
 }
 
-private let configRegex = try! Regex("\\.?xcstringslint\\.ya?ml")
+private var configRegex: Regex<Substring> = {
+    do {
+        return try Regex("\\.?xcstringslint\\.ya?ml")
+    } catch {
+        // Fallback to a simple string contains check
+        fatalError("Failed to compile config regex: \(error)")
+    }
+}()
