@@ -1,7 +1,13 @@
 rules:
-    require-extraction-state:
-        value: "automatic"
-    require-locale:
-        value: "en"
-    require-localization-state:
-        value: "translated"
+  - name: require-extraction-state
+    value: "automatic"
+  - name: require-locale
+    value: "en"
+  - name: require-localization-state
+    value: "translated"
+  - name: require-matching-placeholders
+    severity: error
+  - name: require-object-placeholders
+  - name: reject-patterns
+    values:
+      - "TODO"

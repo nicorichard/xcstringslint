@@ -1,7 +1,8 @@
 public struct Config: Decodable {
-    let rules: [String: Rule]
+    let rules: [Rule]
 
     public struct Rule: Decodable {
+        let name: String
         let values: [String]
         let severity: Severity
 
@@ -11,6 +12,7 @@ public struct Config: Decodable {
         }
 
         enum CodingKeys: String, CaseIterable, CodingKey {
+            case name
             case value
             case values
             case severity
@@ -18,10 +20,15 @@ public struct Config: Decodable {
 
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
+
+            name = try container.decode(String.self, forKey: .name)
+
             if let value = try? container.decodeIfPresent(String.self, forKey: .value) {
                 values = [value]
+            } else if let values = try? container.decodeIfPresent([String].self, forKey: .values) {
+                self.values = values
             } else {
-                values = try container.decode([String].self, forKey: .values)
+                values = []
             }
 
             if let severity = try? container.decodeIfPresent(String.self, forKey: .severity) {
@@ -37,7 +44,8 @@ public struct Config: Decodable {
             }
         }
         
-        public init(values: [String], severity: Severity) {
+        public init(name: String, values: [String], severity: Severity) {
+            self.name = name
             self.values = values
             self.severity = severity
         }

@@ -3,7 +3,8 @@ import ArgumentParser
 
 extension Config {
     func toDomain() throws -> [StringCatalogValidator.Rule] {
-        try rules.compactMap { (ruleName, rule) -> StringCatalogValidator.Rule? in
+        try rules.compactMap { rule -> StringCatalogValidator.Rule? in
+            let ruleName = rule.name
             let domainRule = registry
                 .first(where: { $0.name == ruleName })
                 .map {
