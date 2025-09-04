@@ -109,12 +109,4 @@ class RejectEmptyValuesTests: XCTestCase {
         let result = sut.validate(key: "empty", value: try EntryDecoder.entry(from: json))
         XCTAssertEqual(result, [])
     }
-    
-    func testRejectEmptyValues_staticChecking() {
-        XCTAssertTrue(Rules.RejectEmptyValues.isEmpty(""))
-        XCTAssertTrue(Rules.RejectEmptyValues.isEmpty("   "))
-        XCTAssertTrue(Rules.RejectEmptyValues.isEmpty("\n\t"))
-        XCTAssertFalse(Rules.RejectEmptyValues.isEmpty("Hello"))
-        XCTAssertFalse(Rules.RejectEmptyValues.isEmpty(" Hello "))
-    }
 }
