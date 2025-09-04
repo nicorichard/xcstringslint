@@ -105,6 +105,29 @@
       },
       "shouldTranslate" : false
     },
+    "plural string %d" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "needs_review",
+                  "value" : "plural string %d"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "plural string %d"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "Rejects a localization if its state matches one of the provided values. Know localization states: %@" : {
       "extractionState" : "stale",
       "localizations" : {

@@ -57,6 +57,13 @@ public enum Localization: Decodable {
 }
 
 extension Localization {
+    public var isPluralized: Bool {
+        switch self {
+            case .single: return false
+            case .variable(let mappings): return mappings.keys.contains("plural")
+        }
+    }
+
     public var stringUnits: [StringUnit] {
         switch self {
             case .single(let unit): return [unit]

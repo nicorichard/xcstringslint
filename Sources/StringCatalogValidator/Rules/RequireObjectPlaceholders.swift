@@ -7,7 +7,13 @@ extension Rules {
         public static let name = "require-object-placeholders"
         public static let description = "Requires that all placeholders are object placeholders (e.g., %@, %1$@)."
 
-        public init() {}
+        public let unlessPlural: Bool
+
+        public init(
+            unlessPlural: Bool = false
+        ) {
+            self.unlessPlural = unlessPlural
+        }
 
         public func validate(key: String, value: Entry) -> [Failure] {
             guard let localizations = value.localizations else {
@@ -17,6 +23,9 @@ extension Rules {
             var failures: [String] = []
 
             for (locale, localization) in localizations {
+                if unlessPlural, localization.isPluralized {
+                    continue
+                }
                 for stringUnit in localization.stringUnits {
                     let placeholders = extractPlaceholders(from: stringUnit.value)
                     let nonObjectPlaceholders = placeholders.filter { !$0.isObjectPlaceholder }

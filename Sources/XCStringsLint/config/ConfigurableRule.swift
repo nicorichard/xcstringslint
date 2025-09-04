@@ -138,7 +138,13 @@ extension Rules.RequirePositionalPlaceholders: Decodable {
 }
 
 extension Rules.RequireObjectPlaceholders: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case unlessPlural
+    }
+
     public init(from decoder: any Decoder) throws {
-        self.init()
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let unlessPlural = try container.decodeIfPresent(Bool.self, forKey: .unlessPlural) ?? true
+        self.init(unlessPlural: unlessPlural)
     }
 }

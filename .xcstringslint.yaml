@@ -2,15 +2,20 @@ rules:
   - name: require-extraction-state
     values:
         - automatic
+
   - name: require-locale
     values:
         - en
+
   - name: require-localization-state
     values:
         - translated
+
   - name: require-matching-placeholders
     severity: error
+
   - name: require-object-placeholders
+
   - name: reject-patterns
     values:
       - "TODO"
